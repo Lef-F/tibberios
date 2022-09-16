@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "tibberios"
+version = "0.1.0"
+description = "Do awesome stuff with the Tibber API"
+authors = ["Lef Filippakis <Lef-F@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pyTibber = "^0.25.2"
+pandas = "^1.4.4"
+
+[tool.poetry.group.dev.dependencies]
+jupyterlab = "^3.4.7"
+black = "^22.8.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
