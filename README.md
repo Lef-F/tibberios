@@ -11,3 +11,7 @@ You need the following `config.json` file in your project root:
     "TIBBER_API_KEY": "some_gsdgri_strange_r3f4ww_looking_f43erke_key_from_tibber_dev",
 }
 ```
+
+## Further reading
+
+- [Tibber Dev Docs](https://developer.tibber.com/)
