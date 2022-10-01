@@ -6,7 +6,7 @@ authors = ["Lef Filippakis <Lef-F@users.noreply.github.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = ">=3.9, <3.11"
 pyTibber = "^0.25.2"
 pandas = "^1.4.4"
 matplotlib = "^3.6.0"
