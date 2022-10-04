@@ -8,11 +8,11 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = ">=3.9, <3.11"
 pyTibber = "^0.25.2"
+
+[tool.poetry.group.dev.dependencies]
 pandas = "^1.4.4"
 matplotlib = "^3.6.0"
 plotly = "^5.10.0"
-
-[tool.poetry.group.dev.dependencies]
 jupyterlab = "^3.4.7"
 black = "^22.8.0"
 
