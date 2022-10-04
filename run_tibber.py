@@ -1,11 +1,11 @@
 #!/bin/python3
 from dataclasses import dataclass
+from datetime import date, datetime
+from pprint import pprint
 from typing import Iterable
 
 import tibber
 from aiohttp import ClientSession
-
-from pprint import pprint
 
 
 @dataclass
@@ -138,6 +138,7 @@ async def main(
     else:
         db_path = config.database_path
 
+    print(f"Starting at {datetime.now().isoformat()}")
     if verbose:
         print(f"The database path is: {db_path}")
         print(f"The config path is: {config_path}")
@@ -160,6 +161,7 @@ async def main(
         print("Latest 10 consumption values:")
         db.show_latest_data()
     db.close()
+    print(f"Ended at {datetime.now().isoformat()}")
 
 
 if __name__ == "__main__":
