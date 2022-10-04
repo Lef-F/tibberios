@@ -50,6 +50,21 @@ I recommend you run with a lot of records the first time, in order to populate y
 Then you can run every hour and update the last ~48 records, or less if you have a live electricity meter.
 In my case (not live) the consumption data appears with 1-2 days of delay, thus I need to re-fetch the past data in order to keep everything updated.
 
+## Deploying
+
+Currently the deployment is managed manually:
+
+1. `git clone` this repository into your remote machine
+2. Create a cronjob in `crontab -e` by adding your own modified version the following command combo:
+
+```shell
+# Tibber update data
+*/10 * * * * ( . /home/pi/.cache/pypoetry/virtualenvs/tibberios-someRandomThingsHere-py3.10/bin/activate && python /home/pi/tibberios/run_tibber.py --verbose --db-path /opt/grafana/tibber.db --config-path /home/pi/tibberios/config.json >> /home/pi/tibberios/run.log 2>&1 )
+```
+
+In my case, I have setup Grafana to be able to read local files in the `/opt/grafana/` path in my Raspberry Pi.
+Thus, I store and run my `sqlite` databases there and Grafana operates them from there using this [Grafana plugin](https://github.com/fr-ser/grafana-sqlite-datasource).
+
 ## Further reading
 
 - [Tibber Dev Docs](https://developer.tibber.com/)
