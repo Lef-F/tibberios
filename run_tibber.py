@@ -108,6 +108,18 @@ class Database:
         cursor.executemany(query, values)
         self.connection.commit()
 
+    def delete_null_rows(self) -> None:
+        # TODO: Make generic
+        query = """
+            DELETE
+            FROM consumption
+            WHERE start_time IS NULL
+                OR trim(start_time) = '';
+        """
+        cursor = self.connection
+        cursor.execute(query)
+        self.connection.commit()
+
     def close(self) -> None:
         self.connection.close()
 
@@ -140,6 +152,9 @@ async def main(
     if verbose:
         print("Consumption table created")
     db.upsert_table(values=data.values())
+    if verbose:
+        print("Cleaning rows with NULL or empty time values")
+    db.delete_null_rows()
     if verbose:
         print("Consumption values upserted")
         print("Latest 10 consumption values:")
