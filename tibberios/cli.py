@@ -52,6 +52,12 @@ def run() -> None:
         formatter_class=ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument(
+        "--config-path",
+        type=str,
+        required=True,
+        help="The path to the JSON configuration file for Tibberios",
+    )
+    parser.add_argument(
         "--db-path",
         type=str,
         required=False,
@@ -61,19 +67,6 @@ def run() -> None:
                 getcwd(),
                 "..",
                 "tibber.db",
-            ),
-        ),
-    )
-    parser.add_argument(
-        "--config-path",
-        type=str,
-        required=False,
-        help="The path to the JSON configuration file for Tibberios",
-        default=path.normpath(
-            path.join(
-                getcwd(),
-                "..",
-                "config.json",
             ),
         ),
     )
