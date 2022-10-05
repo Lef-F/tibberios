@@ -56,14 +56,26 @@ def run() -> None:
         type=str,
         required=False,
         help="The path where the SQLite database file is/will be stored. Can be set in DATABASE_PATH key in your config file.",
-        default=path.join(getcwd(), "..", "tibber.db"),
+        default=path.normpath(
+            path.join(
+                getcwd(),
+                "..",
+                "tibber.db",
+            ),
+        ),
     )
     parser.add_argument(
         "--config-path",
         type=str,
         required=False,
         help="The path to the JSON configuration file for Tibberios",
-        default=path.join(getcwd(), "..", "config.json"),
+        default=path.normpath(
+            path.join(
+                getcwd(),
+                "..",
+                "config.json",
+            ),
+        ),
     )
     parser.add_argument(
         "--resolution",

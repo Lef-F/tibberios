@@ -17,7 +17,7 @@ jupyterlab = "^3.4.7"
 black = "^22.8.0"
 
 [tool.poetry.scripts]
-tibberios = 'tibberios.script:run'
+tibberios = 'tibberios.cli:run'
 
 [build-system]
 requires = ["poetry-core"]
