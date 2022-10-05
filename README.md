@@ -17,7 +17,7 @@ I really wanted to store some of my Tibber data in a database I control to achie
 
 ## Setup 🛠
 
-First setup your environment using: `poetry install` or `pip install -r requirements.txt`.
+First setup your environment using: `poetry install --only main` or `pip install -r requirements.txt`.
 
 You need the following `config.json` file in your project root:
 
@@ -34,8 +34,16 @@ Get your [Tibber API key](https://developer.tibber.com/).
 
 (Hopefully) you will find all you need in the attached Python help:
 
+If you installed with `poetry`, activate the virtual environment for `tibberios` and run:
+
 ```shell
-python run_tibber.py --help
+tibberios --help
+```
+
+Else, if you installed with `pip` then you can use the provided `run.py` script:
+
+```shell
+python run.py --help
 ```
 
 ### Get your consumption data and store them in a `sqlite` database file
@@ -43,7 +51,7 @@ python run_tibber.py --help
 The following will get you the latest 1000 hours of your data:
 
 ```shell
-python run_tibber.py --resolution HOURLY --records 1000
+tibberios --resolution HOURLY --records 1000
 ```
 
 I recommend you run with a lot of records the first time, in order to populate your past data.
@@ -59,7 +67,7 @@ Currently the deployment is managed manually:
 
 ```shell
 # Tibber update data
-*/10 * * * * ( . /home/pi/.cache/pypoetry/virtualenvs/tibberios-someRandomThingsHere-py3.10/bin/activate && python /home/pi/tibberios/run_tibber.py --verbose --db-path /opt/grafana/tibber.db --config-path /home/pi/tibberios/config.json >> /home/pi/tibberios/run.log 2>&1 )
+*/10 * * * * ( . /home/pi/.cache/pypoetry/virtualenvs/tibberios-someRandomThingsHere-py3.10/bin/activate && tibberios --verbose --config-path /home/pi/tibberios/config.json >> /home/pi/tibberios/run.log 2>&1 )
 ```
 
 In my case, I have setup Grafana to be able to read local files in the `/opt/grafana/` path in my Raspberry Pi.
@@ -69,6 +77,8 @@ Thus, I store and run my `sqlite` databases there and Grafana operates them from
 
 - [Tibber Dev Docs](https://developer.tibber.com/)
 - [pyTibber](https://github.com/Danielhiversen/pyTibber)
+- [Grafana](https://grafana.com/docs/grafana/latest/)
+- [Grafana SQLite data source plugin](https://github.com/fr-ser/grafana-sqlite-datasource)
 
 ## Referral copy/pasted from my Tibber App
 

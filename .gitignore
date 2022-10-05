@@ -1,3 +1,5 @@
 config.json
 **.db
 **.db-journal
+__pycache__/
+dist/

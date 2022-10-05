@@ -16,6 +16,9 @@ plotly = "^5.10.0"
 jupyterlab = "^3.4.7"
 black = "^22.8.0"
 
+[tool.poetry.scripts]
+tibberios = 'tibberios.script:run'
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
