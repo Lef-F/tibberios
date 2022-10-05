@@ -1,4 +1,4 @@
 #!/bin/bash
-from tibberios.script import run
+from tibberios.cli import run
 
 run()

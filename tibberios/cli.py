@@ -12,6 +12,16 @@ async def main(
     config = Config(filepath=config_path)
 
     if db_path:
+        if config.database_path:
+            if config.database_path != db_path:
+                raise RuntimeError(
+                    f"""
+                We found two different database paths defined in --db-path and {config_path}.
+                Please only provide one.
+                --db-path: {db_path}
+                {config_path}: {config.database_path}
+                """
+                )
         pass
     else:
         db_path = config.database_path
@@ -45,7 +55,6 @@ async def main(
 def run() -> None:
     from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
     from asyncio import new_event_loop
-    from os import getcwd, path
     from sys import exit
 
     parser = ArgumentParser(
@@ -62,13 +71,6 @@ def run() -> None:
         type=str,
         required=False,
         help="The path where the SQLite database file is/will be stored. Can be set in DATABASE_PATH key in your config file.",
-        default=path.normpath(
-            path.join(
-                getcwd(),
-                "..",
-                "tibber.db",
-            ),
-        ),
     )
     parser.add_argument(
         "--resolution",

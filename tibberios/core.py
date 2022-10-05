@@ -17,8 +17,14 @@ class Config:
         # TODO: Allow for fetching from environment variables
         with open(self.filepath, "r") as f:
             self.config = load(f)
-        self.tibber_api_key = self.config["TIBBER_API_KEY"]
-        self.database_path = self.config["DATABASE_PATH"]
+        self.tibber_api_key = self._try_fetch_config_key("TIBBER_API_KEY")
+        self.database_path = self._try_fetch_config_key("DATABASE_PATH")
+
+    def _try_fetch_config_key(self, key_name: str) -> str:
+        try:
+            return self.config[key_name]
+        except:
+            return None
 
 
 @dataclass
@@ -58,7 +64,8 @@ class Database:
         self.connection = connect(database=self._database_path)
 
     def __del__(self) -> None:
-        self.close()
+        if hasattr(self, "connection") and self.connection:
+            self.close()
 
     def create_table(self) -> None:
         # TODO: Make generic
