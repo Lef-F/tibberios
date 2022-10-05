@@ -1,4 +1,4 @@
-from .core import Config, Database, TibberConnector, History
+from .core import Config, Database, TibberConnector, PriceData
 from datetime import datetime
 
 
@@ -34,13 +34,12 @@ async def main(
 
     db = Database(db_path)
     tib = TibberConnector(config.tibber_api_key)
-    history = await tib.get_history(resolution=resolution, records=records)
-    data = History(data=history)
+    price_data = await tib.get_price_data(resolution=resolution, records=records)
 
     db.create_table()
     if verbose:
         print("Consumption table created")
-    db.upsert_table(values=data.values())
+    db.upsert_table(values=price_data.price_table)
     if verbose:
         print("Cleaning rows with NULL or empty time values")
     db.delete_null_rows()

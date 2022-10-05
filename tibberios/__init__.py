@@ -1,6 +1,6 @@
 from .core import (
     Config,
-    History,
+    PriceData,
     TibberConnector,
     Database,
 )
