@@ -67,11 +67,13 @@ Currently the deployment is managed manually:
 
 ```shell
 # Tibber update data
-*/10 * * * * ( . /home/pi/.cache/pypoetry/virtualenvs/tibberios-someRandomThingsHere-py3.10/bin/activate && tibberios --verbose --config-path /home/pi/tibberios/config.json >> /home/pi/tibberios/run.log 2>&1 )
+*/10 * * * * ( . /home/pi/.cache/pypoetry/virtualenvs/tibberios-someRandomThingsHere-py3.10/bin/activate && tibberios --records 100 --verbose --config-path /home/pi/tibberios/config.json >> /home/pi/tibberios/run.log 2>&1 )
 ```
 
 In my case, I have setup Grafana to be able to read local files in the `/opt/grafana/` path in my Raspberry Pi.
 Thus, I store and run my `sqlite` databases there and Grafana operates them from there using this [Grafana plugin](https://github.com/fr-ser/grafana-sqlite-datasource).
+
+By trial and error I found `--records 100` to work great for backfilling consumption and cost data, if you don't have access to real-time Tibber data.
 
 ## Further reading
 
