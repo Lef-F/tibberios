@@ -1,0 +1,598 @@
+{
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "target": {
+            "limit": 100,
+            "matchAny": false,
+            "tags": [],
+            "type": "dashboard"
+          },
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 2,
+    "id": 10,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+      {
+        "datasource": {
+          "type": "frser-sqlite-datasource",
+          "uid": "J1xIjBigz"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "blue",
+              "mode": "fixed",
+              "seriesBy": "last"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "currencySEK"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Total Cost"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "currencySEK"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Total Hours"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "h"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        },
+        "id": 23,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": true
+          },
+          "textMode": "value_and_name"
+        },
+        "pluginVersion": "9.1.7",
+        "targets": [
+          {
+            "datasource": {
+              "type": "frser-sqlite-datasource",
+              "uid": "J1xIjBigz"
+            },
+            "queryText": "with prices as (\n  SELECT \n      case\n        when '${price_agg}' = 'Hourly' \n          then unixepoch(strftime('%Y-%m-%dT%H:00:00', start_time))\n        when '${price_agg}' = 'Daily' \n          then unixepoch(start_time, 'start of day')\n        when '${price_agg}' = 'Weekly' \n          then strftime('%W', start_time)\n        when '${price_agg}' = 'Monthly' \n          then unixepoch(start_time, 'start of month')\n      end as start_time\n    , unit_price * ${kwh} as hour_price\n    , 1 as consecutive_hours\n  FROM consumption\n  WHERE unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) < $__to / 1000\n)\nselect\n  sum(hour_price) as \"Total Cost\"\n  , sum(consecutive_hours) as \"Total Hours\"\nfrom prices",
+            "queryType": "table",
+            "rawQueryText": "with prices as (\n  SELECT \n      case\n        when '${price_agg}' = 'Hourly' \n          then unixepoch(strftime('%Y-%m-%dT%H:00:00', start_time))\n        when '${price_agg}' = 'Daily' \n          then unixepoch(start_time, 'start of day')\n        when '${price_agg}' = 'Weekly' \n          then strftime('%W', start_time)\n        when '${price_agg}' = 'Monthly' \n          then unixepoch(start_time, 'start of month')\n      end as start_time\n    , unit_price * ${kwh} as hour_price\n    , 1 as consecutive_hours\n  FROM consumption\n  WHERE unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) < $__to / 1000\n)\nselect\n  sum(hour_price) as \"Total Cost\"\n  , sum(consecutive_hours) as \"Total Hours\"\nfrom prices",
+            "refId": "A",
+            "timeColumns": [
+              "start_time"
+            ]
+          }
+        ],
+        "title": "Total cost of continuous operation for ${kwh:text}",
+        "transformations": [],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "fifemon-graphql-datasource",
+          "uid": "0UnQVRmRk"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "center",
+              "displayMode": "color-background-solid",
+              "filterable": false,
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "total"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Price per kWh"
+                },
+                {
+                  "id": "unit",
+                  "value": "currencySEK"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "level"
+              },
+              "properties": [
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "CHEAP": {
+                          "color": "semi-dark-green",
+                          "index": 1,
+                          "text": "Cheap"
+                        },
+                        "EXPENSIVE": {
+                          "color": "semi-dark-red",
+                          "index": 3,
+                          "text": "Expensive"
+                        },
+                        "NORMAL": {
+                          "color": "semi-dark-blue",
+                          "index": 2,
+                          "text": "Normal"
+                        },
+                        "VERY_CHEAP": {
+                          "color": "green",
+                          "index": 0,
+                          "text": "Very Cheap"
+                        },
+                        "VERY_EXPENSIVE": {
+                          "color": "red",
+                          "index": 4,
+                          "text": "Very Expensive"
+                        }
+                      },
+                      "type": "value"
+                    }
+                  ]
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "thresholds"
+                  }
+                },
+                {
+                  "id": "displayName",
+                  "value": "Price Level"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "Hourly Cost to.*"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "currencySEK"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 12,
+          "x": 0,
+          "y": 6
+        },
+        "id": 17,
+        "options": {
+          "footer": {
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true
+        },
+        "pluginVersion": "9.1.7",
+        "targets": [
+          {
+            "aliasBy": "",
+            "annotationTags": "",
+            "annotationText": "",
+            "annotationTitle": "",
+            "constant": 6.5,
+            "dataPath": "viewer.home.currentSubscription.priceInfo.current",
+            "datasource": {
+              "type": "fifemon-graphql-datasource",
+              "uid": "0UnQVRmRk"
+            },
+            "endTimePath": "endTime",
+            "groupBy": "",
+            "queryText": "query{\n  viewer{\n    home(id:\"your-home-id-here\"){\n      currentSubscription{\n        priceInfo{\n          current{\n            total\n            level\n          }\n        }\n      }\n    }\n  }\n}",
+            "refId": "A",
+            "timePath": ""
+          }
+        ],
+        "title": "Price of Electricity Now",
+        "transformations": [
+          {
+            "id": "calculateField",
+            "options": {
+              "alias": "Hourly Cost to ${kwh:text}",
+              "binary": {
+                "left": "total",
+                "operator": "*",
+                "reducer": "sum",
+                "right": "${kwh:value}"
+              },
+              "mode": "binary",
+              "reduce": {
+                "reducer": "sum"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "frser-sqlite-datasource",
+          "uid": "J1xIjBigz"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "continuous-GrYlRd"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 59,
+              "gradientMode": "scheme",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 1,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "displayName": "Cost of ${kwh:text} each hour",
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "currencySEK"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 9
+        },
+        "id": 21,
+        "options": {
+          "legend": {
+            "calcs": [
+              "first",
+              "max",
+              "min",
+              "mean"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "frser-sqlite-datasource",
+              "uid": "J1xIjBigz"
+            },
+            "queryText": "SELECT\n  case\n    when '${price_agg}' = 'Hourly' \n      then unixepoch(strftime('%Y-%m-%dT%H:00:00', start_time))\n    when '${price_agg}' = 'Daily' \n      then unixepoch(start_time, 'start of day')\n    when '${price_agg}' = 'Weekly' \n      then strftime('%W', start_time)\n    when '${price_agg}' = 'Monthly' \n      then unixepoch(start_time, 'start of month')\n  end as start_time\n  , avg(unit_price * ${kwh}) as hour_price\nFROM consumption\nWHERE unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) < $__to / 1000\ngroup by 1\norder by 1",
+            "queryType": "time series",
+            "rawQueryText": "SELECT\n  case\n    when '${price_agg}' = 'Hourly' \n      then unixepoch(strftime('%Y-%m-%dT%H:00:00', start_time))\n    when '${price_agg}' = 'Daily' \n      then unixepoch(start_time, 'start of day')\n    when '${price_agg}' = 'Weekly' \n      then strftime('%W', start_time)\n    when '${price_agg}' = 'Monthly' \n      then unixepoch(start_time, 'start of month')\n  end as start_time\n  , avg(unit_price * ${kwh}) as hour_price\nFROM consumption\nWHERE unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) < $__to / 1000\ngroup by 1\norder by 1",
+            "refId": "A",
+            "timeColumns": [
+              "start_time"
+            ]
+          }
+        ],
+        "title": "${kwh:text} | Cost over each hour bucket",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "frser-sqlite-datasource",
+          "uid": "J1xIjBigz"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "blue",
+              "mode": "fixed",
+              "seriesBy": "last"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineStyle": {
+                "fill": "solid"
+              },
+              "lineWidth": 2,
+              "pointSize": 6,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "displayName": "${kwh:text}",
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "currencySEK"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 17
+        },
+        "id": 22,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": false
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "frser-sqlite-datasource",
+              "uid": "J1xIjBigz"
+            },
+            "queryText": "with prices as (\n  SELECT \n      case\n        when '${price_agg}' = 'Hourly' \n          then unixepoch(strftime('%Y-%m-%dT%H:00:00', start_time))\n        when '${price_agg}' = 'Daily' \n          then unixepoch(start_time, 'start of day')\n        when '${price_agg}' = 'Weekly' \n          then strftime('%W', start_time)\n        when '${price_agg}' = 'Monthly' \n          then unixepoch(start_time, 'start of month')\n      end as start_time\n    , unit_price * ${kwh} as hour_price\n  FROM consumption\n  WHERE unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) < $__to / 1000\n)\nselect distinct\n  start_time\n  , sum(hour_price) over (order by start_time) as cum_hour_price\nfrom prices\norder by 1",
+            "queryType": "time series",
+            "rawQueryText": "with prices as (\n  SELECT \n      case\n        when '${price_agg}' = 'Hourly' \n          then unixepoch(strftime('%Y-%m-%dT%H:00:00', start_time))\n        when '${price_agg}' = 'Daily' \n          then unixepoch(start_time, 'start of day')\n        when '${price_agg}' = 'Weekly' \n          then strftime('%W', start_time)\n        when '${price_agg}' = 'Monthly' \n          then unixepoch(start_time, 'start of month')\n      end as start_time\n    , unit_price * ${kwh} as hour_price\n  FROM consumption\n  WHERE unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) < $__to / 1000\n)\nselect distinct\n  start_time\n  , sum(hour_price) over (order by start_time) as cum_hour_price\nfrom prices\norder by 1",
+            "refId": "A",
+            "timeColumns": [
+              "start_time"
+            ]
+          }
+        ],
+        "title": "${kwh:text} | Cost of continuous operation",
+        "transformations": [],
+        "type": "timeseries"
+      }
+    ],
+    "refresh": false,
+    "schemaVersion": 37,
+    "style": "dark",
+    "tags": [],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "selected": false,
+            "text": "Charge Car Hourly",
+            "value": "3.7"
+          },
+          "hide": 0,
+          "includeAll": false,
+          "label": "Activity",
+          "multi": false,
+          "name": "kwh",
+          "options": [
+            {
+              "selected": false,
+              "text": "Charge Car 0-100%",
+              "value": "46"
+            },
+            {
+              "selected": true,
+              "text": "Charge Car Hourly",
+              "value": "3.7"
+            },
+            {
+              "selected": false,
+              "text": "Computer Screen Average",
+              "value": "0.015"
+            },
+            {
+              "selected": false,
+              "text": "Computer Screen w/ USB-C Charger",
+              "value": "0.118"
+            },
+            {
+              "selected": false,
+              "text": "MacBook Pro",
+              "value": "0.140"
+            },
+            {
+              "selected": false,
+              "text": "Night Light",
+              "value": "0.002"
+            }
+          ],
+          "query": "Charge Car 0-100% : 46, Charge Car Hourly : 3.7, Computer Screen Average : 0.015 , Computer Screen w/ USB-C Charger : 0.118 , MacBook Pro : 0.140 , Night Light : 0.002",
+          "queryValue": "",
+          "skipUrlSync": false,
+          "type": "custom"
+        },
+        {
+          "auto": false,
+          "auto_count": 30,
+          "auto_min": "10s",
+          "current": {
+            "selected": false,
+            "text": "Hourly",
+            "value": "Hourly"
+          },
+          "hide": 0,
+          "label": "Price Aggregation",
+          "name": "price_agg",
+          "options": [
+            {
+              "selected": true,
+              "text": "Hourly",
+              "value": "Hourly"
+            },
+            {
+              "selected": false,
+              "text": "Daily",
+              "value": "Daily"
+            },
+            {
+              "selected": false,
+              "text": "Weekly",
+              "value": "Weekly"
+            },
+            {
+              "selected": false,
+              "text": "Monthly",
+              "value": "Monthly"
+            }
+          ],
+          "query": "Hourly, Daily, Weekly, Monthly",
+          "queryValue": "",
+          "refresh": 2,
+          "skipUrlSync": false,
+          "type": "interval"
+        }
+      ]
+    },
+    "time": {
+      "from": "now",
+      "to": "now+2d"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "How Much Things Cost?",
+    "uid": "JcwFr8igz",
+    "version": 13,
+    "weekStart": ""
+  }
+  
