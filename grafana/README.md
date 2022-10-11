@@ -8,6 +8,11 @@ You can add them to your own Grafana instance by simply using the `Import` optio
 
 Read more on the [official Grafana docs](https://grafana.com/docs/grafana/latest/dashboards/manage-dashboards/#export-and-import-dashboards).
 
+You will also need to have the following Grafana data source plugins installed:
+
+- [GraphQL](https://grafana.com/grafana/plugins/fifemon-graphql-datasource/)
+- [SQLite](https://grafana.com/grafana/plugins/frser-sqlite-datasource/)
+
 ## Home Electricity Monitoring
 
 A bunch of nice-to-have metrics, time-series and distributions to excite the data geek in you.
