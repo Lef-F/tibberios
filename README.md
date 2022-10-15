@@ -118,7 +118,14 @@ tibberios --config-path config.json --generate-vis electricity_prices.png
 
 #### To update your `epd7in5_V2` Waveshare e-Paper Display
 
-Run something like the following:
+You first need to make sure you have fetched the git submodules:
+
+```shell
+git submodule sync
+git submodule update --init --recursive
+```
+
+From then on you can run something like the following:
 
 ```shell
 tibberios --config-path config.json --generate-vis electricity_prices.png --update-display
