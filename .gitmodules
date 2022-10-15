@@ -1,6 +1,3 @@
-[submodule "tibberios/e-Paper"]
-	path = tibberios/e-Paper
-	url = git@github.com:waveshare/e-Paper.git
 [submodule "tibberios/e_Paper"]
 	path = tibberios/e_Paper
-	url = git@github.com:waveshare/e-Paper.git
+	url = https://github.com/waveshare/e-Paper.git
