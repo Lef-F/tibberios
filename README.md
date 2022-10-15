@@ -108,6 +108,32 @@ The reasons being:
 - There is a few GitHub repositories with support for it, and [from Waveshare themselves](https://github.com/waveshare/e-Paper)
 - The size is just right, not too large not too small (lagom as they say in swedish 🇸🇪)
 
+#### To generate a new image visualization
+
+Run something like the following:
+
+```shell
+tibberios --config-path config.json --generate-vis electricity_prices.png
+```
+
+#### To update your `epd7in5_V2` Waveshare e-Paper Display
+
+Run something like the following:
+
+```shell
+tibberios --config-path config.json --generate-vis electricity_prices.png --update-display
+```
+
+**Note 1:** Currently only the `epd7in5_V2` is supported.
+Unsure if it would make sense to support smaller display sizes at the moment, since the text won't be legible.
+Maybe the way forward is to have an API to allow folks to setup Tibberios for their own displays.
+Raise a GitHub Issue or create a Pull Request if you have some good ideas. ❤️
+
+**Note 2:** Yes, it is a bit against intuition to have to run a Tibber API update in order to visualize future data or update your display.
+It will be solved when we implement something like subcommands with [`click`](https://click.palletsprojects.com/en/8.1.x/).
+
+---
+
 #### So here's a first demo of how it looks like
 
 Here you can see a sample of the graph rendered by `plotly`:
