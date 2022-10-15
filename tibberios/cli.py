@@ -1,4 +1,5 @@
-from .core import Config, Database, TibberConnector, PriceData
+from .core import Config, Database, TibberConnector
+from .visualization import GenerateViz
 from datetime import datetime
 
 
@@ -7,6 +8,8 @@ async def main(
     config_path: str,
     resolution: str,
     records: int,
+    generate_vis: str,
+    update_display: bool,
     verbose: bool,
 ) -> None:
     config = Config(filepath=config_path)
@@ -47,7 +50,22 @@ async def main(
         print("Consumption values upserted")
         print("Latest 10 consumption values:")
         db.show_latest_data()
+
+    # TODO: make into subcommand using Python click
+    if generate_vis:
+        print(f"Generating visualization at {generate_vis}")
+        gv = GenerateViz(db)
+        # TODO: allow user to set comparison
+        # 4kWh ~ the cost of showering for 10 minutes at 40C
+        gv.create_visualization(filepath=generate_vis, comparison_kwh=4, decimals=0)
+
     db.close()
+
+    # TODO: make into subcommand using Python click
+    if update_display:
+        from .display import update
+
+        update(generate_vis)
     print(f"Ended at {datetime.now().isoformat()}")
 
 
@@ -85,6 +103,21 @@ def run() -> None:
         default=24 * 2,
         help="The number of latest records to fetch from now to the past from the Tibber API.",
     )
+    # TODO: Make subcommand
+    parser.add_argument(
+        "--generate-vis",
+        required=False,
+        type=str,
+        help="Generate visualization of prices for today and tomorrow.",
+    )
+    # TODO: Make subcommand
+    parser.add_argument(
+        "--update-display",
+        required=False,
+        default=False,
+        action="store_true",
+        help="Update the Waveshare 7.5 inch V2 e-Paper Display.",
+    )
     parser.add_argument(
         "--verbose",
         required=False,
@@ -101,6 +134,8 @@ def run() -> None:
             config_path=args.config_path,
             resolution=args.resolution,
             records=args.records,
+            generate_vis=args.generate_vis,
+            update_display=args.update_display,
             verbose=args.verbose,
         )
     )
