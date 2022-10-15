@@ -15,6 +15,8 @@ I really wanted to store some of my Tibber data in a database I control to achie
 - Allow me to visualize it in my own tools of preference e.g. Grafana
 - Use it in my own application e.g. e-paper display that shows a graph of today's (and tomorrow, once available) spot prices
 
+---
+
 ## Setup 🛠
 
 First setup your environment using: `poetry install --only main` or `pip install -r requirements.txt`.
@@ -58,7 +60,9 @@ I recommend you run with a lot of records the first time, in order to populate y
 Then you can run every hour and update the last ~48 records, or less if you have a live electricity meter.
 In my case (not live) the consumption data appears with 1-2 days of delay, thus I need to re-fetch the past data in order to keep everything updated.
 
-## Deploying
+---
+
+## Deploying 🚀
 
 Currently the deployment is managed manually:
 
@@ -75,12 +79,61 @@ Thus, I store and run my `sqlite` databases there and Grafana operates them from
 
 By trial and error I found `--records 100` to work great for backfilling consumption and cost data, if you don't have access to real-time Tibber data.
 
+---
+
+## Visualize your data 📊
+
+### Grafana 📈
+
+SQLite + self-hosted Grafana = ❤️
+
+I'm hosting a Grafana instance in my Raspberry Pi to monitor a bunch of things, which is great because by running `Tibberios` on the same machine allows us to query the resulting tables in `Tibberios`'s SQLite database.
+
+[For more read the `Tibberios` docs on Grafana and check out the Grafana dashboard JSON models.](grafana/README.md)
+
+### e-Paper Display 📜
+
+As much as I enjoy these electricity management apps, I have noticed that they introduce some new limitations to my life:
+
+- I am the only person in the family with access to the current and future electricity price
+- I have to check my phone every time
+
+As such, I came up with a fun project idea:
+Hook-up an e-Paper Display to my Raspberry Pi and show the current and future prices for all in an accessible location at home! 🤯
+
+So after a bunch of research I ordered the [Waveshare 7.5 Inch E-Paper Display](https://www.waveshare.com/7.5inch-e-paper-hat.htm) which comes with a HAT for Raspberry Pi.
+The reasons being:
+
+- It seems quite popular on Amazon and the price was fine.
+- There is a few GitHub repositories with support for it, and [from Waveshare themselves](https://github.com/waveshare/e-Paper)
+- The size is just right, not too large not too small (lagom as they say in swedish 🇸🇪)
+
+#### So here's a first demo of how it looks like
+
+Here you can see a sample of the graph rendered by `plotly`:
+
+![Hourly Electricity Data](docs/img/electricity_prices.png)
+
+And here you can see how the same picture looks like when printed on the e-paper display:
+
+![e-Paper Display showing electricity data](docs/img/e-paper-electricity-prices.jpeg)
+
+Don't worry about it being so naked, I have ordered [a case for it from Waveshare](https://www.waveshare.com/7.5inch-e-paper-case.htm) as a development enclosure and will likely move to a nice looking frame for the production environment. 🏡
+
+**Note:** *This project is currently in progress, come back for updates. 🕺*
+
+---
+
 ## Further reading
 
 - [Tibber Dev Docs](https://developer.tibber.com/)
 - [pyTibber](https://github.com/Danielhiversen/pyTibber)
 - [Grafana](https://grafana.com/docs/grafana/latest/)
 - [Grafana SQLite data source plugin](https://github.com/fr-ser/grafana-sqlite-datasource)
+- [Waveshare eShop](https://www.waveshare.com/)
+- [Waveshare on GitHub](https://github.com/waveshare)
+
+---
 
 ## Referral copy/pasted from my Tibber App
 
