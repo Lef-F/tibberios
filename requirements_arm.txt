@@ -19,3 +19,6 @@ six==1.16.0 ; python_version >= "3.9" and python_version < "3.11"
 tenacity==8.1.0 ; python_version >= "3.9" and python_version < "3.11"
 websockets==10.3 ; python_version >= "3.9" and python_version < "3.11"
 yarl==1.8.1 ; python_version >= "3.9" and python_version < "3.11"
+# from the Waveshare e-Paper library for updating the e-paper display on a raspberry pi
+"RPi.GPIO"==0.7.1
+spidev==3.5
