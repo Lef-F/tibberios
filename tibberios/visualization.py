@@ -13,12 +13,12 @@ class GenerateViz:
                 start_time
                 , unit_price 
             from consumption
-            where unixepoch(start_time) >= unixepoch(strftime('%Y-%m-%dT%H:00:00', 'now')) 
+            where datetime(start_time) >= datetime(strftime('%Y-%m-%dT%H:00:00', 'now')) 
                 -- safeguard against unexpected future datapoints
                 -- # BUG: something is fishy with the timezones on this one, 
                 -- # removing +1 day doesn't limit to today which likely means we would get data 
                 -- # from ~1 extra future day if they're available for some reason
-                and unixepoch(start_time) <= unixepoch(strftime('%Y-%m-%dT23:59:59', 'now'), '+1 day')
+                and datetime(start_time) <= datetime(strftime('%Y-%m-%dT23:59:59', 'now'), '+1 day')
             order by start_time;
         """
         self._db = db
