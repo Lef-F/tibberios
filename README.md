@@ -19,7 +19,22 @@ I really wanted to store some of my Tibber data in a database I control to achie
 
 ## Setup 🛠
 
-First setup your environment using: `poetry install --only main` or `pip install -r requirements.txt`.
+### Setup the Python environment
+
+First setup your environment using: `poetry install --only main`
+
+**Note:** For ARM devices (e.g. Raspberry Pi) prefer `pip install -r requirements_arm.txt`.
+After the introduction of the `kaleido` Python package we've had some issues setting up the Python environment for ARM devices due to them having split up the support into a new version `0.2.1.post1` for some reason. 🤷‍♂️
+
+It is recommended that you use a virtual environment for the best results.
+`poetry install` will already create one for you which you can activate with `poetry shell`.
+If you're going the `pip` way then you can:
+
+1. `python3 -m venv .venv`
+2. `source .venv/bin/activate`
+3. `pip install -r the_requirements_file_that_fits_you.txt`
+
+### Create your `config.json` file
 
 You need the following `config.json` file in your project root:
 
