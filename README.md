@@ -161,7 +161,9 @@ And here you can see how the same picture looks like when printed on the e-paper
 
 Don't worry about it being so naked, I have ordered [a case for it from Waveshare](https://www.waveshare.com/7.5inch-e-paper-case.htm) as a development enclosure and will likely move to a nice looking frame for the production environment. 🏡
 
-**Note:** *This project is currently in progress, come back for updates. 🕺*
+**Note 1:** *This project is currently in progress, come back for updates. 🕺*
+
+**Note 2:** *The "cost of a shower" price analogy was copied from [duscha.nu](http://www.duscha.nu/). 😊*
 
 ---
 
