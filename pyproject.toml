@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tibberios"
-version = "0.1.1"
+version = "0.1.2"
 description = "Do awesome stuff with the Tibber API"
 authors = ["Lef Filippakis <Lef-F@users.noreply.github.com>"]
 readme = "README.md"
@@ -8,11 +8,15 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = ">=3.9, <3.11"
 pyTibber = "^0.25.2"
+Pillow = "9.2.0"
+kaleido = "0.2.1"
+plotly = "^5.10.0"
+pandas = "^1.4.4"
+# from the Waveshare e-Paper library for updating the e-paper display on a raspberry pi
+"RPi.GPIO" = {version = "^0.7.1", optional = true}
+spidev = {version = "^3.5", optional = true}
 
 [tool.poetry.group.dev.dependencies]
-pandas = "^1.4.4"
-matplotlib = "^3.6.0"
-plotly = "^5.10.0"
 jupyterlab = "^3.4.7"
 black = "^22.8.0"
 

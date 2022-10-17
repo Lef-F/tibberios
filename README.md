@@ -15,9 +15,26 @@ I really wanted to store some of my Tibber data in a database I control to achie
 - Allow me to visualize it in my own tools of preference e.g. Grafana
 - Use it in my own application e.g. e-paper display that shows a graph of today's (and tomorrow, once available) spot prices
 
+---
+
 ## Setup 🛠
 
-First setup your environment using: `poetry install --only main` or `pip install -r requirements.txt`.
+### Setup the Python environment
+
+First setup your environment using: `poetry install --only main`
+
+**Note:** For ARM devices (e.g. Raspberry Pi) prefer `pip install -r requirements_arm.txt`.
+After the introduction of the `kaleido` Python package we've had some issues setting up the Python environment for ARM devices due to them having split up the support into a new version `0.2.1.post1` for some reason. 🤷‍♂️
+
+It is recommended that you use a virtual environment for the best results.
+`poetry install` will already create one for you which you can activate with `poetry shell`.
+If you're going the `pip` way then you can:
+
+1. `python3 -m venv .venv`
+2. `source .venv/bin/activate`
+3. `pip install -r the_requirements_file_that_fits_you.txt`
+
+### Create your `config.json` file
 
 You need the following `config.json` file in your project root:
 
@@ -58,7 +75,9 @@ I recommend you run with a lot of records the first time, in order to populate y
 Then you can run every hour and update the last ~48 records, or less if you have a live electricity meter.
 In my case (not live) the consumption data appears with 1-2 days of delay, thus I need to re-fetch the past data in order to keep everything updated.
 
-## Deploying
+---
+
+## Deploying 🚀
 
 Currently the deployment is managed manually:
 
@@ -75,12 +94,87 @@ Thus, I store and run my `sqlite` databases there and Grafana operates them from
 
 By trial and error I found `--records 100` to work great for backfilling consumption and cost data, if you don't have access to real-time Tibber data.
 
+---
+
+## Visualize your data 📊
+
+### Grafana 📈
+
+SQLite + self-hosted Grafana = ❤️
+
+I'm hosting a Grafana instance in my Raspberry Pi to monitor a bunch of things, which is great because by running `Tibberios` on the same machine allows us to query the resulting tables in `Tibberios`'s SQLite database.
+
+[For more read the `Tibberios` docs on Grafana and check out the Grafana dashboard JSON models.](grafana/README.md)
+
+### e-Paper Display 📜
+
+As much as I enjoy these electricity management apps, I have noticed that they introduce some new limitations to my life:
+
+- I am the only person in the family with access to the current and future electricity price
+- I have to check my phone every time
+
+As such, I came up with a fun project idea:
+Hook-up an e-Paper Display to my Raspberry Pi and show the current and future prices for all in an accessible location at home! 🤯
+
+So after a bunch of research I ordered the [Waveshare 7.5 Inch E-Paper Display](https://www.waveshare.com/7.5inch-e-paper-hat.htm) which comes with a HAT for Raspberry Pi.
+The reasons being:
+
+- It seems quite popular on Amazon and the price was fine.
+- There is a few GitHub repositories with support for it, and [from Waveshare themselves](https://github.com/waveshare/e-Paper)
+- The size is just right, not too large not too small (lagom as they say in swedish 🇸🇪)
+
+#### To generate a new image visualization
+
+Run something like the following:
+
+```shell
+tibberios --config-path config.json --generate-vis electricity_prices.png
+```
+
+#### To update your `epd7in5_V2` Waveshare e-Paper Display
+
+You can run something like the following:
+
+```shell
+tibberios --config-path config.json --generate-vis electricity_prices.png --update-display
+```
+
+**Note 1:** Currently only the `epd7in5_V2` is supported.
+Unsure if it would make sense to support smaller display sizes at the moment, since the text won't be legible.
+Maybe the way forward is to have an API to allow folks to setup Tibberios for their own displays.
+Raise a GitHub Issue or create a Pull Request if you have some good ideas. ❤️
+
+**Note 2:** Yes, it is a bit against intuition to have to run a Tibber API update in order to visualize future data or update your display.
+It will be solved when we implement something like subcommands with [`click`](https://click.palletsprojects.com/en/8.1.x/).
+
+---
+
+#### So here's a first demo of how it looks like
+
+Here you can see a sample of the graph rendered by `plotly`:
+
+![Hourly Electricity Data](docs/img/electricity_prices.png)
+
+And here you can see how the same picture looks like when printed on the e-paper display:
+
+![e-Paper Display showing electricity data](docs/img/e-paper-electricity-prices.jpeg)
+
+Don't worry about it being so naked, I have ordered [a case for it from Waveshare](https://www.waveshare.com/7.5inch-e-paper-case.htm) as a development enclosure and will likely move to a nice looking frame for the production environment. 🏡
+
+**Note:** *This project is currently in progress, come back for updates. 🕺*
+
+---
+
 ## Further reading
 
 - [Tibber Dev Docs](https://developer.tibber.com/)
 - [pyTibber](https://github.com/Danielhiversen/pyTibber)
 - [Grafana](https://grafana.com/docs/grafana/latest/)
 - [Grafana SQLite data source plugin](https://github.com/fr-ser/grafana-sqlite-datasource)
+- [Waveshare eShop](https://www.waveshare.com/)
+- [Waveshare on GitHub](https://github.com/waveshare)
+
+---
 
 ## Referral copy/pasted from my Tibber App
 
