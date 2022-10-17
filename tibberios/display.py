@@ -6,34 +6,32 @@ import time
 
 from PIL import Image
 
-from .e_Paper.RaspberryPi_JetsonNano.python.lib.waveshare_epd import epd7in5_V2
-
-logging.basicConfig(level=logging.DEBUG)
+from .drivers.waveshare import epd7in5_V2
 
 
 def update(image_path: str) -> None:
     try:
-        logging.info("Loading epd7in5_V2")
+        print("Loading epd7in5_V2")
         epd = epd7in5_V2.EPD()
-        logging.info("init and Clear")
+        print("Init and clear epd7in5_v2")
         epd.init()
         epd.Clear()
 
-        logging.info("read bmp file")
+        print(f"Display image file: {image_path}")
         Himage = Image.open(image_path)
         epd.display(epd.getbuffer(Himage))
         time.sleep(2)
 
-        logging.info("Goto Sleep...")
+        print("Sleep epd7in5_v2...")
         epd.sleep()
 
     except IOError as e:
-        logging.info(f"IOError: {e}")
+        print(f"IOError from epd7in5_v2: {e}")
         epd7in5_V2.epdconfig.module_exit()
 
 
 def clear() -> None:
     epd = epd7in5_V2.EPD()
-    logging.info("Clear...")
+    print("Clear epd7in5_v2 display...")
     epd.init()
     epd.Clear()
