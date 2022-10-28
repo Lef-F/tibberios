@@ -71,7 +71,7 @@ async def main(
 
 def run() -> None:
     from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
-    from asyncio import new_event_loop
+    from asyncio import run as async_run
     from sys import exit
 
     parser = ArgumentParser(
@@ -127,8 +127,7 @@ def run() -> None:
     )
     args = parser.parse_args()
 
-    loop = new_event_loop()
-    loop.run_until_complete(
+    async_run(
         main(
             db_path=args.db_path,
             config_path=args.config_path,
@@ -139,5 +138,8 @@ def run() -> None:
             verbose=args.verbose,
         )
     )
-    loop.close()
     exit(0)
+
+
+if __name__ == "__main__":
+    run()

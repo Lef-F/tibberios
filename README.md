@@ -57,10 +57,10 @@ If you installed with `poetry`, activate the virtual environment for `tibberios`
 tibberios --help
 ```
 
-Else, if you installed with `pip` then you can use the provided `run.py` script:
+Else, if you installed with `pip` then you can use the provided [`run`](/run) script:
 
 ```shell
-python run.py --help
+./run --help
 ```
 
 ### Get your consumption data and store them in a `sqlite` database file
