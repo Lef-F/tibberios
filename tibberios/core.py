@@ -1,9 +1,10 @@
 from dataclasses import dataclass
-from pprint import pprint
 from collections import Counter
 
 import tibber
 from aiohttp import ClientSession
+
+from os import remove
 
 
 @dataclass
@@ -127,7 +128,15 @@ class TibberConnector:
 
 
 class Database:
+    """For smoother SQLite3 database operations."""
+
     def __init__(self, filename: str) -> None:
+        """An interface for performing common database operations on a SQLite3 database.
+
+        Args
+        ----
+            filename: The path to the SQLite3 database file. Will get created if it doesn't exist.
+        """
         from sqlite3 import connect
 
         self._database_path = filename
@@ -137,62 +146,121 @@ class Database:
         if hasattr(self, "connection") and self.connection:
             self.close()
 
-    def create_table(self) -> None:
-        # TODO: Make generic
-        query = """
-            CREATE TABLE IF NOT EXISTS consumption(
-                start_time DATE PRIMARY KEY,
-                unit_price REAL,
-                total_cost REAL,
-                cost REAL,
-                consumption REAL
+    def delete_database(self) -> bool:
+        """DESTROY THE DATABASE.
+
+        Returns
+        -------
+            bool: True if the database was deleted, raises exception otherwise.
+        """
+        remove(self._database_path)
+        return True
+
+    def create_table(self, name: str, cols_n_types: dict) -> None:
+        """Create a table in the database.
+
+        Args
+        ----
+            name: The table name
+            cols_n_types: A dictionary with keys as the column names and values as SQLite data types
+        """
+        query = f"""
+            CREATE TABLE IF NOT EXISTS {name} (
+                {','.join([c + " " + t for c, t in cols_n_types.items()])}
             );
         """
         cursor = self.connection
         cursor = cursor.execute(query)
         self.connection.commit()
 
-    def show_latest_data(self, limit: int = 10) -> None:
-        # TODO: Make generic
+    def get_latest_data(self, name: str, order: str, limit: int = 10) -> list[tuple]:
+        """Get the latest values from a table.
+
+        Args
+        ----
+            name: The table name
+            order: The column name by which to order the results
+            limit: The number of results to return
+
+        Returns
+        -------
+            list: The latest data as queried from the database table,
+                as a list of tuples where each row is represented in a tuple.
+        """
         query = f"""
             SELECT *
-            FROM consumption
-            ORDER BY start_time DESC
+            FROM {name}
+            ORDER BY {order} DESC
             LIMIT {limit};
         """
         cursor = self.connection
         cursor = cursor.execute(query)
-        pprint(cursor.fetchall())
+        return cursor.fetchall()
 
-    def upsert_table(self, values: list[tuple]) -> None:
-        # TODO: Make generic
-        query = """
-            INSERT INTO consumption(
-                start_time
-                , unit_price
-                , total_cost
-                , cost
-                , consumption
-            )
-            VALUES(?, ?, ?, ?, ?)
-            ON CONFLICT(start_time) DO UPDATE SET
-                unit_price = excluded.unit_price
-                , total_cost = excluded.total_cost
-                , cost = excluded.cost
-                , consumption = excluded.consumption;
+    def insert_table(self, name: str, columns: list[str], values: list[tuple]) -> None:
+        """Insert values to a table
+
+        Args
+        ----
+            name: The table name
+            columns: The names of the columns in the table
+            values: The values to insert in the table
         """
-
+        query = f"""
+            INSERT INTO {name} (
+                {','.join(columns)}
+            )
+            VALUES ({','.join('?'*len(columns))})
+        """
         cursor = self.connection
         cursor.executemany(query, values)
         self.connection.commit()
 
-    def delete_null_rows(self) -> None:
-        # TODO: Make generic
-        query = """
+    def upsert_table(
+        self, name: str, columns: list[str], values: list[tuple], pk: str
+    ) -> None:
+        """Upsert a table aka insert values and overwrite if pk already has values.
+
+        Args
+        ----
+            name: The table name
+            columns: The names of the columns in the table
+            values: The values to insert in the table
+            pk: The private key of the table
+        """
+        n_cols = len(columns)
+        for i, v in enumerate(values):
+            assert n_cols == len(
+                v
+            ), f"Row {i} in received values contains {len(v)} values, expected {n_cols}"
+
+        cols_to_update = set(columns) - set([pk])
+        query = f"""
+            INSERT INTO {name} (
+                {','.join(columns)}
+            )
+            VALUES ({','.join('?'*len(columns))})
+            ON CONFLICT ({pk}) DO UPDATE SET
+                {','.join([f'{c} = excluded.{c}' for c in cols_to_update])}
+            ;
+        """
+        cursor = self.connection
+        cursor.executemany(query, values)
+        self.connection.commit()
+
+    def delete_null_rows(self, name: str, pk: str) -> None:
+        """Delete rows where the pk
+
+        Args
+        ----
+            name: The table name
+            pk: The private key of the table
+        """
+        query = f"""
             DELETE
-            FROM consumption
-            WHERE start_time IS NULL
-                OR trim(start_time) = '';
+            FROM {name}
+            WHERE {pk} IS NULL
+                OR trim({pk}) = '';
         """
         cursor = self.connection
         cursor.execute(query)

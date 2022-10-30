@@ -1,6 +1,7 @@
 from .core import Config, Database, TibberConnector
 from .visualization import GenerateViz
 from datetime import datetime
+from pprint import pprint
 
 
 async def main(
@@ -39,7 +40,15 @@ async def main(
     tib = TibberConnector(config.tibber_api_key)
     price_data = await tib.get_price_data(resolution=resolution, records=records)
 
-    db.create_table()
+    tbl_name = "consumption"
+    columns = {
+        "start_time": "DATE PRIMARY KEY",
+        "unit_price": "REAL",
+        "total_cost": "REAL",
+        "cost": "REAL",
+        "consumption": "REAL",
+    }
+    db.create_table(name=tbl_name, cols_n_types=columns)
     if verbose:
         print("Consumption table created")
     db.upsert_table(values=price_data.price_table)
@@ -49,7 +58,7 @@ async def main(
     if verbose:
         print("Consumption values upserted")
         print("Latest 10 consumption values:")
-        db.show_latest_data()
+        pprint(db.get_latest_data(name=tbl_name, order="start_time"))
 
     # TODO: make into subcommand using Python click
     if generate_vis:
