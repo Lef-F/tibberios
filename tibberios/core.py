@@ -226,7 +226,7 @@ class Database:
             name: The table name
             columns: The names of the columns in the table
             values: The values to insert in the table
-            pk: The private key of the table
+            pk: The primary key of the table
         """
         n_cols = len(columns)
         for i, v in enumerate(values):
@@ -254,7 +254,7 @@ class Database:
         Args
         ----
             name: The table name
-            pk: The private key of the table
+            pk: The primary key of the table
         """
         query = f"""
             DELETE

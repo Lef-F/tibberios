@@ -48,13 +48,17 @@ async def main(
         "cost": "REAL",
         "consumption": "REAL",
     }
+    pk = "start_time"
+
     db.create_table(name=tbl_name, cols_n_types=columns)
     if verbose:
         print("Consumption table created")
-    db.upsert_table(values=price_data.price_table)
+    db.upsert_table(
+        name=tbl_name, columns=columns.keys(), values=price_data.price_table, pk=pk
+    )
     if verbose:
         print("Cleaning rows with NULL or empty time values")
-    db.delete_null_rows()
+    db.delete_null_rows(name=tbl_name, pk=pk)
     if verbose:
         print("Consumption values upserted")
         print("Latest 10 consumption values:")
