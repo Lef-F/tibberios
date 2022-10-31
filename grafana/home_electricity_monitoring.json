@@ -1,1288 +1,1287 @@
 {
-    "annotations": {
-      "list": [
-        {
-          "builtIn": 1,
-          "datasource": {
-            "type": "grafana",
-            "uid": "-- Grafana --"
-          },
-          "enable": true,
-          "hide": true,
-          "iconColor": "rgba(0, 211, 255, 1)",
-          "name": "Annotations & Alerts",
-          "target": {
-            "limit": 100,
-            "matchAny": false,
-            "tags": [],
-            "type": "dashboard"
-          },
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
           "type": "dashboard"
-        }
-      ]
-    },
-    "editable": true,
-    "fiscalYearStartMonth": 0,
-    "graphTooltip": 2,
-    "id": 9,
-    "links": [],
-    "liveNow": false,
-    "panels": [
-      {
-        "datasource": {
-          "type": "fifemon-graphql-datasource",
-          "uid": "0UnQVRmRk"
         },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "custom": {
-              "align": "center",
-              "displayMode": "color-background-solid",
-              "filterable": false,
-              "inspect": false
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                }
-              ]
-            }
-          },
-          "overrides": [
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "total"
-              },
-              "properties": [
-                {
-                  "id": "displayName",
-                  "value": "Price per kWh"
-                },
-                {
-                  "id": "unit",
-                  "value": "currencySEK"
-                },
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "blue",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "level"
-              },
-              "properties": [
-                {
-                  "id": "mappings",
-                  "value": [
-                    {
-                      "options": {
-                        "CHEAP": {
-                          "color": "semi-dark-green",
-                          "index": 1,
-                          "text": "Cheap"
-                        },
-                        "EXPENSIVE": {
-                          "color": "semi-dark-red",
-                          "index": 3,
-                          "text": "Expensive"
-                        },
-                        "NORMAL": {
-                          "color": "semi-dark-blue",
-                          "index": 2,
-                          "text": "Normal"
-                        },
-                        "VERY_CHEAP": {
-                          "color": "green",
-                          "index": 0,
-                          "text": "Very Cheap"
-                        },
-                        "VERY_EXPENSIVE": {
-                          "color": "red",
-                          "index": 4,
-                          "text": "Very Expensive"
-                        }
-                      },
-                      "type": "value"
-                    }
-                  ]
-                },
-                {
-                  "id": "color",
-                  "value": {
-                    "mode": "thresholds"
-                  }
-                },
-                {
-                  "id": "displayName",
-                  "value": "Price Level"
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "startsAt"
-              },
-              "properties": [
-                {
-                  "id": "displayName",
-                  "value": "Active From"
-                },
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "blue",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        "id": 17,
-        "options": {
-          "footer": {
-            "fields": "",
-            "reducer": [
-              "sum"
-            ],
-            "show": false
-          },
-          "showHeader": true
-        },
-        "pluginVersion": "9.1.7",
-        "targets": [
-          {
-            "aliasBy": "",
-            "annotationTags": "",
-            "annotationText": "",
-            "annotationTitle": "",
-            "constant": 6.5,
-            "dataPath": "viewer.home.currentSubscription.priceInfo.current",
-            "datasource": {
-              "type": "fifemon-graphql-datasource",
-              "uid": "0UnQVRmRk"
-            },
-            "endTimePath": "endTime",
-            "groupBy": "",
-            "queryText": "query{\n  viewer{\n    home(id:\"your-home-id-here\"){\n      currentSubscription{\n        priceInfo{\n          current{\n            startsAt\n            total\n            level\n          }\n        }\n      }\n    }\n  }\n}",
-            "refId": "A",
-            "timePath": "startsAt"
-          }
-        ],
-        "title": "Price of Electricity Now",
-        "type": "table"
-      },
-      {
-        "datasource": {
-          "type": "frser-sqlite-datasource",
-          "uid": "J1xIjBigz"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "blue",
-                  "value": null
-                }
-              ]
-            },
-            "unit": "currencySEK"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 3,
-          "w": 6,
-          "x": 6,
-          "y": 0
-        },
-        "id": 10,
-        "options": {
-          "colorMode": "value",
-          "graphMode": "area",
-          "justifyMode": "auto",
-          "orientation": "auto",
-          "reduceOptions": {
-            "calcs": [
-              "min"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "textMode": "auto"
-        },
-        "pluginVersion": "9.1.7",
-        "targets": [
-          {
-            "datasource": {
-              "type": "frser-sqlite-datasource",
-              "uid": "J1xIjBigz"
-            },
-            "queryText": "select\n  avg(total_cost) as \"Average\"\n  , min(total_cost) as \"Min\"\n  , max(total_cost) as \"Max\"\n  , sum(total_cost) as \"Total\"\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000\n\n",
-            "queryType": "table",
-            "rawQueryText": "select\n  avg(total_cost) as \"Average\"\n  , min(total_cost) as \"Min\"\n  , max(total_cost) as \"Max\"\n  , sum(total_cost) as \"Total\"\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000\n\n",
-            "refId": "A",
-            "timeColumns": []
-          }
-        ],
-        "title": "Electricity Cost",
-        "transformations": [],
-        "type": "stat"
-      },
-      {
-        "datasource": {
-          "type": "frser-sqlite-datasource",
-          "uid": "J1xIjBigz"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "blue",
-                  "value": null
-                }
-              ]
-            },
-            "unit": "currencySEK"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 3,
-          "w": 6,
-          "x": 12,
-          "y": 0
-        },
-        "id": 12,
-        "options": {
-          "colorMode": "value",
-          "graphMode": "area",
-          "justifyMode": "auto",
-          "orientation": "auto",
-          "reduceOptions": {
-            "calcs": [
-              "min"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "textMode": "auto"
-        },
-        "pluginVersion": "9.1.7",
-        "targets": [
-          {
-            "datasource": {
-              "type": "frser-sqlite-datasource",
-              "uid": "J1xIjBigz"
-            },
-            "queryText": "select\n  avg(unit_price) as \"Average\"\n  , min(unit_price) as \"Min\"\n  , max(unit_price) as \"Max\"\n  , sum(unit_price) as \"Total\"\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000",
-            "queryType": "table",
-            "rawQueryText": "select\n  avg(unit_price) as \"Average\"\n  , min(unit_price) as \"Min\"\n  , max(unit_price) as \"Max\"\n  , sum(unit_price) as \"Total\"\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000",
-            "refId": "A",
-            "timeColumns": []
-          }
-        ],
-        "title": "Electricity Price",
-        "transformations": [],
-        "type": "stat"
-      },
-      {
-        "datasource": {
-          "type": "frser-sqlite-datasource",
-          "uid": "J1xIjBigz"
-        },
-        "description": "",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "blue",
-                  "value": null
-                }
-              ]
-            },
-            "unit": "kwatth"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 3,
-          "w": 6,
-          "x": 18,
-          "y": 0
-        },
-        "id": 11,
-        "options": {
-          "colorMode": "value",
-          "graphMode": "area",
-          "justifyMode": "auto",
-          "orientation": "auto",
-          "reduceOptions": {
-            "calcs": [
-              "min"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "textMode": "auto"
-        },
-        "pluginVersion": "9.1.7",
-        "targets": [
-          {
-            "datasource": {
-              "type": "frser-sqlite-datasource",
-              "uid": "J1xIjBigz"
-            },
-            "queryText": "select\n  avg(consumption) as \"Average\"\n  , min(consumption) as \"Min\"\n  , max(consumption) as \"Max\"\n  , sum(consumption) as \"Total\"\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000",
-            "queryType": "table",
-            "rawQueryText": "select\n  avg(consumption) as \"Average\"\n  , min(consumption) as \"Min\"\n  , max(consumption) as \"Max\"\n  , sum(consumption) as \"Total\"\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000",
-            "refId": "A",
-            "timeColumns": []
-          }
-        ],
-        "title": "Electricity Consumption",
-        "transformations": [],
-        "type": "stat"
-      },
-      {
-        "datasource": {
-          "type": "frser-sqlite-datasource",
-          "uid": "J1xIjBigz"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "left",
-              "barAlignment": 0,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            }
-          },
-          "overrides": [
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "unit_price unit_price"
-              },
-              "properties": [
-                {
-                  "id": "unit",
-                  "value": "currencySEK"
-                },
-                {
-                  "id": "displayName",
-                  "value": "Spot Price"
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "total_cost total_cost"
-              },
-              "properties": [
-                {
-                  "id": "unit",
-                  "value": "currencySEK"
-                },
-                {
-                  "id": "displayName",
-                  "value": "Price to Pay"
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "consumption consumption"
-              },
-              "properties": [
-                {
-                  "id": "unit",
-                  "value": "kwatth"
-                },
-                {
-                  "id": "custom.axisPlacement",
-                  "value": "right"
-                },
-                {
-                  "id": "displayName",
-                  "value": "Energy Consumed"
-                }
-              ]
-            }
-          ]
-        },
-        "gridPos": {
-          "h": 6,
-          "w": 16,
-          "x": 0,
-          "y": 3
-        },
-        "id": 13,
-        "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "mode": "multi",
-            "sort": "none"
-          }
-        },
-        "targets": [
-          {
-            "datasource": {
-              "type": "frser-sqlite-datasource",
-              "uid": "J1xIjBigz"
-            },
-            "key": "Q-33977147-abd9-4535-b13e-1bdf72aaaf1c-0",
-            "queryText": "select \n  case\n    when '${price_agg}' = 'Hourly' \n      then unixepoch(start_time)\n    when '${price_agg}' = 'Daily' \n      then unixepoch(start_time, 'start of day')\n    when '${price_agg}' = 'Monthly' \n      then unixepoch(start_time, 'start of month')\n  end as start_time\n  , avg(unit_price) as unit_price\n  , avg(total_cost) as total_cost\n  , avg(consumption) as consumption\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000\ngroup by 1\norder by 1\n\n",
-            "queryType": "time series",
-            "rawQueryText": "select \n  case\n    when '${price_agg}' = 'Hourly' \n      then unixepoch(start_time)\n    when '${price_agg}' = 'Daily' \n      then unixepoch(start_time, 'start of day')\n    when '${price_agg}' = 'Monthly' \n      then unixepoch(start_time, 'start of month')\n  end as start_time\n  , avg(unit_price) as unit_price\n  , avg(total_cost) as total_cost\n  , avg(consumption) as consumption\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000\ngroup by 1\norder by 1\n\n",
-            "refId": "A",
-            "timeColumns": [
-              "start_time"
-            ]
-          }
-        ],
-        "title": "Daily Energy Consumption and Price",
-        "transformations": [],
-        "type": "timeseries"
-      },
-      {
-        "datasource": {
-          "type": "frser-sqlite-datasource",
-          "uid": "J1xIjBigz"
-        },
-        "description": "",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "continuous-GrYlRd",
-              "seriesBy": "last"
-            },
-            "custom": {
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "drawStyle": "bars",
-              "fillOpacity": 61,
-              "gradientMode": "scheme",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "lineInterpolation": "linear",
-              "lineWidth": 0,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "displayName": "Average Price per kWh",
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                }
-              ]
-            },
-            "unit": "currencySEK"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 6,
-          "w": 8,
-          "x": 16,
-          "y": 3
-        },
-        "id": 19,
-        "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "mode": "multi",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "9.1.7",
-        "targets": [
-          {
-            "datasource": {
-              "type": "frser-sqlite-datasource",
-              "uid": "J1xIjBigz"
-            },
-            "key": "Q-8c7c4fe3-36f0-411d-98d9-98a840549c9e-0",
-            "queryText": "select\n  unixepoch(date(start_time)) as start_date\n  , avg(unit_price) as avg_price\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) < $__to / 1000\ngroup by 1\norder by 1\n",
-            "queryType": "time series",
-            "rawQueryText": "select\n  unixepoch(date(start_time)) as start_date\n  , avg(unit_price) as avg_price\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) < $__to / 1000\ngroup by 1\norder by 1\n",
-            "refId": "A",
-            "timeColumns": [
-              "start_date"
-            ]
-          }
-        ],
-        "title": "Daily Average Price",
-        "type": "timeseries"
-      },
-      {
-        "datasource": {
-          "type": "frser-sqlite-datasource",
-          "uid": "J1xIjBigz"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "left",
-              "barAlignment": 0,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            }
-          },
-          "overrides": [
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "cumulative_cost cumulative_cost"
-              },
-              "properties": [
-                {
-                  "id": "unit",
-                  "value": "currencySEK"
-                },
-                {
-                  "id": "displayName",
-                  "value": "Price to Pay"
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "cumulative_consumption cumulative_consumption"
-              },
-              "properties": [
-                {
-                  "id": "unit",
-                  "value": "kwatth"
-                },
-                {
-                  "id": "custom.axisPlacement",
-                  "value": "right"
-                },
-                {
-                  "id": "displayName",
-                  "value": "Energy Consumed"
-                }
-              ]
-            }
-          ]
-        },
-        "gridPos": {
-          "h": 6,
-          "w": 16,
-          "x": 0,
-          "y": 9
-        },
-        "id": 14,
-        "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "mode": "multi",
-            "sort": "none"
-          }
-        },
-        "targets": [
-          {
-            "datasource": {
-              "type": "frser-sqlite-datasource",
-              "uid": "J1xIjBigz"
-            },
-            "key": "Q-33977147-abd9-4535-b13e-1bdf72aaaf1c-0",
-            "queryText": "with aggregation as (\n  select\n    case\n      when '${price_agg}' = 'Hourly' \n        then unixepoch(start_time)\n      when '${price_agg}' = 'Daily' \n        then unixepoch(start_time, 'start of day')\n      when '${price_agg}' = 'Monthly' \n        then unixepoch(start_time, 'start of month')\n    end as start_time\n    , avg(total_cost) as total_cost\n    , avg(consumption) as consumption\n  from consumption\n  where unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000\n  group by 1\n)\n\nselect \n  start_time\n  , sum(total_cost) over (order by start_time) as cumulative_cost\n  , sum(consumption) over (order by start_time) as cumulative_consumption\nfrom aggregation\norder by 1\n\n",
-            "queryType": "time series",
-            "rawQueryText": "with aggregation as (\n  select\n    case\n      when '${price_agg}' = 'Hourly' \n        then unixepoch(start_time)\n      when '${price_agg}' = 'Daily' \n        then unixepoch(start_time, 'start of day')\n      when '${price_agg}' = 'Monthly' \n        then unixepoch(start_time, 'start of month')\n    end as start_time\n    , avg(total_cost) as total_cost\n    , avg(consumption) as consumption\n  from consumption\n  where unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000\n  group by 1\n)\n\nselect \n  start_time\n  , sum(total_cost) over (order by start_time) as cumulative_cost\n  , sum(consumption) over (order by start_time) as cumulative_consumption\nfrom aggregation\norder by 1\n\n",
-            "refId": "A",
-            "timeColumns": [
-              "start_time"
-            ]
-          }
-        ],
-        "title": "Cumulative Energy Consumption and Cost",
-        "transformations": [],
-        "type": "timeseries"
-      },
-      {
-        "datasource": {
-          "type": "frser-sqlite-datasource",
-          "uid": "J1xIjBigz"
-        },
-        "description": "",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "custom": {
-              "fillOpacity": 80,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "lineWidth": 1
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            },
-            "unit": "currencySEK"
-          },
-          "overrides": [
-            {
-              "matcher": {
-                "id": "byRegexp",
-                "options": ".*Consumption"
-              },
-              "properties": [
-                {
-                  "id": "unit",
-                  "value": "kwatth"
-                }
-              ]
-            }
-          ]
-        },
-        "gridPos": {
-          "h": 6,
-          "w": 8,
-          "x": 16,
-          "y": 9
-        },
-        "id": 22,
-        "maxPerRow": 2,
-        "options": {
-          "bucketOffset": 0,
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          }
-        },
-        "repeat": "metrics",
-        "repeatDirection": "v",
-        "targets": [
-          {
-            "datasource": {
-              "type": "frser-sqlite-datasource",
-              "uid": "J1xIjBigz"
-            },
-            "queryText": "select ${metrics:value}\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000",
-            "queryType": "table",
-            "rawQueryText": "select ${metrics:value}\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000",
-            "refId": "A",
-            "timeColumns": []
-          }
-        ],
-        "title": "Distribution of ${metrics:text}",
-        "type": "histogram"
-      },
-      {
-        "datasource": {
-          "type": "frser-sqlite-datasource",
-          "uid": "J1xIjBigz"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "continuous-GrYlRd"
-            },
-            "custom": {
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "fillOpacity": 84,
-              "gradientMode": "scheme",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "lineWidth": 0,
-              "scaleDistribution": {
-                "type": "linear"
-              }
-            },
-            "displayName": "Spot Price",
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                }
-              ]
-            },
-            "unit": "currencySEK"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 7,
-          "w": 16,
-          "x": 0,
-          "y": 15
-        },
-        "id": 20,
-        "options": {
-          "barRadius": 0,
-          "barWidth": 0.94,
-          "colorByField": "unit_price",
-          "groupWidth": 0.7,
-          "legend": {
-            "calcs": [
-              "mean",
-              "max",
-              "min",
-              "firstNotNull",
-              "range"
-            ],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "orientation": "auto",
-          "showValue": "always",
-          "stacking": "none",
-          "text": {},
-          "tooltip": {
-            "mode": "single",
-            "sort": "none"
-          },
-          "xField": "start_time",
-          "xTickLabelRotation": -90,
-          "xTickLabelSpacing": 0
-        },
-        "targets": [
-          {
-            "datasource": {
-              "type": "frser-sqlite-datasource",
-              "uid": "J1xIjBigz"
-            },
-            "key": "Q-33977147-abd9-4535-b13e-1bdf72aaaf1c-0",
-            "queryText": "select \n  unixepoch(start_time) as start_time\n  , unit_price\nfrom consumption\nwhere unixepoch(start_time) >= unixepoch(strftime('%Y-%m-%dT%H:00:00', 'now')) and unixepoch(start_time) <= unixepoch('now','+2 day')\n\n",
-            "queryType": "time series",
-            "rawQueryText": "select \n  unixepoch(start_time) as start_time\n  , unit_price\nfrom consumption\nwhere unixepoch(start_time) >= unixepoch(strftime('%Y-%m-%dT%H:00:00', 'now')) and unixepoch(start_time) <= unixepoch('now','+2 day')\n\n",
-            "refId": "A",
-            "timeColumns": [
-              "start_time"
-            ]
-          }
-        ],
-        "title": "Prices from Now to Tomorrow",
-        "transformations": [],
-        "type": "barchart"
-      },
-      {
-        "datasource": {
-          "type": "frser-sqlite-datasource",
-          "uid": "J1xIjBigz"
-        },
-        "description": "",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "custom": {
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "fillOpacity": 80,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "lineWidth": 1,
-              "scaleDistribution": {
-                "type": "linear"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                }
-              ]
-            },
-            "unit": "none"
-          },
-          "overrides": [
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Day of the Month"
-              },
-              "properties": [
-                {
-                  "id": "unit",
-                  "value": "none"
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Average Consumption"
-              },
-              "properties": [
-                {
-                  "id": "unit",
-                  "value": "kwatth"
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byRegexp",
-                "options": "Average Cost"
-              },
-              "properties": [
-                {
-                  "id": "unit",
-                  "value": "currencySEK"
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byRegexp",
-                "options": "Average Spot Price"
-              },
-              "properties": [
-                {
-                  "id": "unit",
-                  "value": "currencySEK"
-                }
-              ]
-            }
-          ]
-        },
-        "gridPos": {
-          "h": 6,
-          "w": 8,
-          "x": 0,
-          "y": 22
-        },
-        "id": 33,
-        "options": {
-          "barRadius": 0,
-          "barWidth": 0.97,
-          "groupWidth": 0.7,
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "orientation": "auto",
-          "showValue": "auto",
-          "stacking": "none",
-          "tooltip": {
-            "mode": "single",
-            "sort": "none"
-          },
-          "xTickLabelRotation": 0,
-          "xTickLabelSpacing": 0
-        },
-        "pluginVersion": "9.1.7",
-        "repeat": "metrics",
-        "repeatDirection": "v",
-        "targets": [
-          {
-            "datasource": {
-              "type": "frser-sqlite-datasource",
-              "uid": "J1xIjBigz"
-            },
-            "queryText": "select \n  strftime('%H', start_time) as \"Hour of the Day\"\n  , avg(${metrics:value}) as \"Average ${metrics:text}\"\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000\ngroup by 1",
-            "queryType": "table",
-            "rawQueryText": "select \n  strftime('%H', start_time) as \"Hour of the Day\"\n  , avg(${metrics:value}) as \"Average ${metrics:text}\"\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000\ngroup by 1",
-            "refId": "A",
-            "timeColumns": []
-          }
-        ],
-        "title": "Average ${metrics:text} per Hour of the Day",
-        "type": "barchart"
-      },
-      {
-        "datasource": {
-          "type": "frser-sqlite-datasource",
-          "uid": "J1xIjBigz"
-        },
-        "description": "",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "custom": {
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "fillOpacity": 80,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "lineWidth": 1,
-              "scaleDistribution": {
-                "type": "linear"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                }
-              ]
-            },
-            "unit": "currencySEK"
-          },
-          "overrides": [
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Average Consumption"
-              },
-              "properties": [
-                {
-                  "id": "unit",
-                  "value": "kwatth"
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byRegexp",
-                "options": ".*Consumption"
-              },
-              "properties": [
-                {
-                  "id": "unit",
-                  "value": "kwatth"
-                }
-              ]
-            }
-          ]
-        },
-        "gridPos": {
-          "h": 6,
-          "w": 8,
-          "x": 8,
-          "y": 22
-        },
-        "id": 28,
-        "options": {
-          "barRadius": 0,
-          "barWidth": 0.97,
-          "groupWidth": 0.7,
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "orientation": "auto",
-          "showValue": "auto",
-          "stacking": "none",
-          "tooltip": {
-            "mode": "single",
-            "sort": "none"
-          },
-          "xTickLabelRotation": 0,
-          "xTickLabelSpacing": 0
-        },
-        "pluginVersion": "9.1.7",
-        "repeat": "metrics",
-        "repeatDirection": "v",
-        "targets": [
-          {
-            "datasource": {
-              "type": "frser-sqlite-datasource",
-              "uid": "J1xIjBigz"
-            },
-            "queryText": "select \n  case\n    when strftime('%w', start_time) = '0' then 'Sunday'\n    when strftime('%w', start_time) = '1' then 'Monday'\n    when strftime('%w', start_time) = '2' then 'Tuesday'\n    when strftime('%w', start_time) = '3' then 'Wednesday'\n    when strftime('%w', start_time) = '4' then 'Thursday'\n    when strftime('%w', start_time) = '5' then 'Friday'\n    when strftime('%w', start_time) = '6' then 'Saturday'\n  end as \"Day of the Week\"\n  , avg(${metrics:value}) as \"Average ${metrics:text}\"\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000\ngroup by 1",
-            "queryType": "table",
-            "rawQueryText": "select \n  case\n    when strftime('%w', start_time) = '0' then 'Sunday'\n    when strftime('%w', start_time) = '1' then 'Monday'\n    when strftime('%w', start_time) = '2' then 'Tuesday'\n    when strftime('%w', start_time) = '3' then 'Wednesday'\n    when strftime('%w', start_time) = '4' then 'Thursday'\n    when strftime('%w', start_time) = '5' then 'Friday'\n    when strftime('%w', start_time) = '6' then 'Saturday'\n  end as \"Day of the Week\"\n  , avg(${metrics:value}) as \"Average ${metrics:text}\"\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000\ngroup by 1",
-            "refId": "A",
-            "timeColumns": []
-          }
-        ],
-        "title": "Average ${metrics:text} per Day of the Week",
-        "type": "barchart"
+        "type": "dashboard"
       }
-    ],
-    "refresh": false,
-    "schemaVersion": 37,
-    "style": "dark",
-    "tags": [],
-    "templating": {
-      "list": [
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 2,
+  "id": 9,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "fifemon-graphql-datasource",
+        "uid": "0UnQVRmRk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "center",
+            "displayMode": "color-background-solid",
+            "filterable": false,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "total"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Price per kWh"
+              },
+              {
+                "id": "unit",
+                "value": "currencySEK"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "level"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "CHEAP": {
+                        "color": "semi-dark-green",
+                        "index": 1,
+                        "text": "Cheap"
+                      },
+                      "EXPENSIVE": {
+                        "color": "semi-dark-red",
+                        "index": 3,
+                        "text": "Expensive"
+                      },
+                      "NORMAL": {
+                        "color": "semi-dark-blue",
+                        "index": 2,
+                        "text": "Normal"
+                      },
+                      "VERY_CHEAP": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "Very Cheap"
+                      },
+                      "VERY_EXPENSIVE": {
+                        "color": "red",
+                        "index": 4,
+                        "text": "Very Expensive"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "Price Level"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "startsAt"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Active From"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "id": 17,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "9.1.7",
+      "targets": [
         {
-          "current": {
+          "aliasBy": "",
+          "annotationTags": "",
+          "annotationText": "",
+          "annotationTitle": "",
+          "constant": 6.5,
+          "dataPath": "viewer.home.currentSubscription.priceInfo.current",
+          "datasource": {
+            "type": "fifemon-graphql-datasource",
+            "uid": "0UnQVRmRk"
+          },
+          "endTimePath": "endTime",
+          "groupBy": "",
+          "queryText": "query{\n  viewer{\n    home(id:\"\"){\n      currentSubscription{\n        priceInfo{\n          current{\n            startsAt\n            total\n            level\n          }\n        }\n      }\n    }\n  }\n}",
+          "refId": "A",
+          "timePath": "startsAt"
+        }
+      ],
+      "title": "Price of Electricity Now",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "J1xIjBigz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          },
+          "unit": "currencySEK"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 6,
+        "y": 0
+      },
+      "id": 10,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "min"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.1.7",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "J1xIjBigz"
+          },
+          "queryText": "select\n  avg(total_cost) as \"Average\"\n  , min(total_cost) as \"Min\"\n  , max(total_cost) as \"Max\"\n  , sum(total_cost) as \"Total\"\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000\n\n",
+          "queryType": "table",
+          "rawQueryText": "select\n  avg(total_cost) as \"Average\"\n  , min(total_cost) as \"Min\"\n  , max(total_cost) as \"Max\"\n  , sum(total_cost) as \"Total\"\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000\n\n",
+          "refId": "A",
+          "timeColumns": []
+        }
+      ],
+      "title": "Electricity Cost",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "J1xIjBigz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          },
+          "unit": "currencySEK"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 12,
+        "y": 0
+      },
+      "id": 12,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "min"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.1.7",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "J1xIjBigz"
+          },
+          "queryText": "select\n  avg(unit_price) as \"Average\"\n  , min(unit_price) as \"Min\"\n  , max(unit_price) as \"Max\"\n  , sum(unit_price) as \"Total\"\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000",
+          "queryType": "table",
+          "rawQueryText": "select\n  avg(unit_price) as \"Average\"\n  , min(unit_price) as \"Min\"\n  , max(unit_price) as \"Max\"\n  , sum(unit_price) as \"Total\"\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000",
+          "refId": "A",
+          "timeColumns": []
+        }
+      ],
+      "title": "Electricity Price",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "J1xIjBigz"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          },
+          "unit": "kwatth"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 18,
+        "y": 0
+      },
+      "id": 11,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "min"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.1.7",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "J1xIjBigz"
+          },
+          "queryText": "select\n  avg(consumption) as \"Average\"\n  , min(consumption) as \"Min\"\n  , max(consumption) as \"Max\"\n  , sum(consumption) as \"Total\"\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000",
+          "queryType": "table",
+          "rawQueryText": "select\n  avg(consumption) as \"Average\"\n  , min(consumption) as \"Min\"\n  , max(consumption) as \"Max\"\n  , sum(consumption) as \"Total\"\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000",
+          "refId": "A",
+          "timeColumns": []
+        }
+      ],
+      "title": "Electricity Consumption",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "J1xIjBigz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "left",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "unit_price unit_price"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencySEK"
+              },
+              {
+                "id": "displayName",
+                "value": "Spot Price"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "total_cost total_cost"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencySEK"
+              },
+              {
+                "id": "displayName",
+                "value": "Price to Pay"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "consumption consumption"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "kwatth"
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "displayName",
+                "value": "Energy Consumed"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 16,
+        "x": 0,
+        "y": 3
+      },
+      "id": 13,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "J1xIjBigz"
+          },
+          "key": "Q-33977147-abd9-4535-b13e-1bdf72aaaf1c-0",
+          "queryText": "select \n  case\n    when '${price_agg}' = 'Hourly' \n      then unixepoch(start_time)\n    when '${price_agg}' = 'Daily' \n      then unixepoch(start_time, 'start of day')\n    when '${price_agg}' = 'Monthly' \n      then unixepoch(start_time, 'start of month')\n  end as start_time\n  , avg(unit_price) as unit_price\n  , avg(total_cost) as total_cost\n  , avg(consumption) as consumption\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000\ngroup by 1\norder by 1\n\n",
+          "queryType": "time series",
+          "rawQueryText": "select \n  case\n    when '${price_agg}' = 'Hourly' \n      then unixepoch(start_time)\n    when '${price_agg}' = 'Daily' \n      then unixepoch(start_time, 'start of day')\n    when '${price_agg}' = 'Monthly' \n      then unixepoch(start_time, 'start of month')\n  end as start_time\n  , avg(unit_price) as unit_price\n  , avg(total_cost) as total_cost\n  , avg(consumption) as consumption\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000\ngroup by 1\norder by 1\n\n",
+          "refId": "A",
+          "timeColumns": [
+            "start_time"
+          ]
+        }
+      ],
+      "title": "Daily Energy Consumption and Price",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "J1xIjBigz"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd",
+            "seriesBy": "last"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "bars",
+            "fillOpacity": 61,
+            "gradientMode": "scheme",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 0,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "displayName": "Average Price per kWh",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "currencySEK"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 16,
+        "y": 3
+      },
+      "id": 19,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.1.7",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "J1xIjBigz"
+          },
+          "key": "Q-8c7c4fe3-36f0-411d-98d9-98a840549c9e-0",
+          "queryText": "select\n  unixepoch(date(start_time)) as start_date\n  , avg(unit_price) as avg_price\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) < $__to / 1000\ngroup by 1\norder by 1\n",
+          "queryType": "time series",
+          "rawQueryText": "select\n  unixepoch(date(start_time)) as start_date\n  , avg(unit_price) as avg_price\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) < $__to / 1000\ngroup by 1\norder by 1\n",
+          "refId": "A",
+          "timeColumns": [
+            "start_date"
+          ]
+        }
+      ],
+      "title": "Daily Average Price",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "J1xIjBigz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "left",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "cumulative_cost cumulative_cost"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencySEK"
+              },
+              {
+                "id": "displayName",
+                "value": "Price to Pay"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "cumulative_consumption cumulative_consumption"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "kwatth"
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "displayName",
+                "value": "Energy Consumed"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 16,
+        "x": 0,
+        "y": 9
+      },
+      "id": 14,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "J1xIjBigz"
+          },
+          "key": "Q-33977147-abd9-4535-b13e-1bdf72aaaf1c-0",
+          "queryText": "with aggregation as (\n  select\n    case\n      when '${price_agg}' = 'Hourly' \n        then unixepoch(start_time)\n      when '${price_agg}' = 'Daily' \n        then unixepoch(start_time, 'start of day')\n      when '${price_agg}' = 'Monthly' \n        then unixepoch(start_time, 'start of month')\n    end as start_time\n    , sum(total_cost) as total_cost\n    , sum(consumption) as consumption\n  from consumption\n  where unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000\n  group by 1\n)\n\nselect \n  start_time\n  , sum(total_cost) over (order by start_time) as cumulative_cost\n  , sum(consumption) over (order by start_time) as cumulative_consumption\nfrom aggregation\norder by 1\n\n",
+          "queryType": "time series",
+          "rawQueryText": "with aggregation as (\n  select\n    case\n      when '${price_agg}' = 'Hourly' \n        then unixepoch(start_time)\n      when '${price_agg}' = 'Daily' \n        then unixepoch(start_time, 'start of day')\n      when '${price_agg}' = 'Monthly' \n        then unixepoch(start_time, 'start of month')\n    end as start_time\n    , sum(total_cost) as total_cost\n    , sum(consumption) as consumption\n  from consumption\n  where unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000\n  group by 1\n)\n\nselect \n  start_time\n  , sum(total_cost) over (order by start_time) as cumulative_cost\n  , sum(consumption) over (order by start_time) as cumulative_consumption\nfrom aggregation\norder by 1\n\n",
+          "refId": "A",
+          "timeColumns": [
+            "start_time"
+          ]
+        }
+      ],
+      "title": "Cumulative Energy Consumption and Cost",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "J1xIjBigz"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "currencySEK"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": ".*Consumption"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "kwatth"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 16,
+        "y": 9
+      },
+      "id": 22,
+      "maxPerRow": 2,
+      "options": {
+        "bucketOffset": 0,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      },
+      "repeat": "metrics",
+      "repeatDirection": "v",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "J1xIjBigz"
+          },
+          "queryText": "select ${metrics:value}\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000",
+          "queryType": "table",
+          "rawQueryText": "select ${metrics:value}\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000",
+          "refId": "A",
+          "timeColumns": []
+        }
+      ],
+      "title": "Distribution of ${metrics:text}",
+      "type": "histogram"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "J1xIjBigz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 84,
+            "gradientMode": "scheme",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 0,
+            "scaleDistribution": {
+              "type": "linear"
+            }
+          },
+          "displayName": "Spot Price",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "currencySEK"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 16,
+        "x": 0,
+        "y": 15
+      },
+      "id": 20,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.94,
+        "colorByField": "unit_price",
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [
+            "mean",
+            "max",
+            "min",
+            "firstNotNull",
+            "range"
+          ],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "always",
+        "stacking": "none",
+        "text": {},
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "start_time",
+        "xTickLabelRotation": -90,
+        "xTickLabelSpacing": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "J1xIjBigz"
+          },
+          "key": "Q-33977147-abd9-4535-b13e-1bdf72aaaf1c-0",
+          "queryText": "select \n  unixepoch(start_time) as start_time\n  , unit_price\nfrom consumption\nwhere unixepoch(start_time) >= unixepoch(strftime('%Y-%m-%dT%H:00:00', 'now')) and unixepoch(start_time) <= unixepoch('now','+2 day')\n\n",
+          "queryType": "time series",
+          "rawQueryText": "select \n  unixepoch(start_time) as start_time\n  , unit_price\nfrom consumption\nwhere unixepoch(start_time) >= unixepoch(strftime('%Y-%m-%dT%H:00:00', 'now')) and unixepoch(start_time) <= unixepoch('now','+2 day')\n\n",
+          "refId": "A",
+          "timeColumns": [
+            "start_time"
+          ]
+        }
+      ],
+      "title": "Prices from Now to Tomorrow",
+      "transformations": [],
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "J1xIjBigz"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Day of the Month"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Average Consumption"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "kwatth"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "Average Cost"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencySEK"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "Average Spot Price"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencySEK"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 0,
+        "y": 22
+      },
+      "id": 33,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "9.1.7",
+      "repeat": "metrics",
+      "repeatDirection": "v",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "J1xIjBigz"
+          },
+          "queryText": "select \n  strftime('%H', start_time) as \"Hour of the Day\"\n  , avg(${metrics:value}) as \"Average ${metrics:text}\"\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000\ngroup by 1",
+          "queryType": "table",
+          "rawQueryText": "select \n  strftime('%H', start_time) as \"Hour of the Day\"\n  , avg(${metrics:value}) as \"Average ${metrics:text}\"\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000\ngroup by 1",
+          "refId": "A",
+          "timeColumns": []
+        }
+      ],
+      "title": "Average ${metrics:text} per Hour of the Day",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "J1xIjBigz"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "currencySEK"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Average Consumption"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "kwatth"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": ".*Consumption"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "kwatth"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 8,
+        "y": 22
+      },
+      "id": 28,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "9.1.7",
+      "repeat": "metrics",
+      "repeatDirection": "v",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "J1xIjBigz"
+          },
+          "queryText": "select \n  case\n    when strftime('%w', start_time) = '0' then 'Sunday'\n    when strftime('%w', start_time) = '1' then 'Monday'\n    when strftime('%w', start_time) = '2' then 'Tuesday'\n    when strftime('%w', start_time) = '3' then 'Wednesday'\n    when strftime('%w', start_time) = '4' then 'Thursday'\n    when strftime('%w', start_time) = '5' then 'Friday'\n    when strftime('%w', start_time) = '6' then 'Saturday'\n  end as \"Day of the Week\"\n  , avg(${metrics:value}) as \"Average ${metrics:text}\"\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000\ngroup by 1",
+          "queryType": "table",
+          "rawQueryText": "select \n  case\n    when strftime('%w', start_time) = '0' then 'Sunday'\n    when strftime('%w', start_time) = '1' then 'Monday'\n    when strftime('%w', start_time) = '2' then 'Tuesday'\n    when strftime('%w', start_time) = '3' then 'Wednesday'\n    when strftime('%w', start_time) = '4' then 'Thursday'\n    when strftime('%w', start_time) = '5' then 'Friday'\n    when strftime('%w', start_time) = '6' then 'Saturday'\n  end as \"Day of the Week\"\n  , avg(${metrics:value}) as \"Average ${metrics:text}\"\nfrom consumption\nwhere unixepoch(start_time) >= $__from / 1000 and unixepoch(start_time) <= $__to / 1000\ngroup by 1",
+          "refId": "A",
+          "timeColumns": []
+        }
+      ],
+      "title": "Average ${metrics:text} per Day of the Week",
+      "type": "barchart"
+    }
+  ],
+  "refresh": false,
+  "schemaVersion": 37,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": "Daily",
+          "value": "Daily"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Price Aggregation",
+        "multi": false,
+        "name": "price_agg",
+        "options": [
+          {
             "selected": false,
+            "text": "Hourly",
+            "value": "Hourly"
+          },
+          {
+            "selected": true,
             "text": "Daily",
             "value": "Daily"
           },
-          "hide": 0,
-          "includeAll": false,
-          "label": "Price Aggregation",
-          "multi": false,
-          "name": "price_agg",
-          "options": [
-            {
-              "selected": false,
-              "text": "Hourly",
-              "value": "Hourly"
-            },
-            {
-              "selected": true,
-              "text": "Daily",
-              "value": "Daily"
-            },
-            {
-              "selected": false,
-              "text": "Monthly",
-              "value": "Monthly"
-            }
-          ],
-          "query": "Hourly, Daily, Monthly",
-          "queryValue": "",
-          "skipUrlSync": false,
-          "type": "custom"
-        },
-        {
-          "current": {
+          {
             "selected": false,
-            "text": [
-              "All"
-            ],
-            "value": [
-              "$__all"
-            ]
-          },
-          "hide": 0,
-          "includeAll": true,
-          "label": "Electricity Metrics",
-          "multi": true,
-          "name": "metrics",
-          "options": [
-            {
-              "selected": true,
-              "text": "All",
-              "value": "$__all"
-            },
-            {
-              "selected": false,
-              "text": "Consumption",
-              "value": "consumption"
-            },
-            {
-              "selected": false,
-              "text": "Spot Price",
-              "value": "unit_price"
-            },
-            {
-              "selected": false,
-              "text": "Cost",
-              "value": "total_cost"
-            }
+            "text": "Monthly",
+            "value": "Monthly"
+          }
+        ],
+        "query": "Hourly, Daily, Monthly",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
           ],
-          "query": "Consumption : consumption,Spot Price : unit_price,Cost : total_cost",
-          "queryValue": "",
-          "skipUrlSync": false,
-          "type": "custom"
-        }
-      ]
-    },
-    "time": {
-      "from": "now/M",
-      "to": "now"
-    },
-    "timepicker": {},
-    "timezone": "",
-    "title": "Home Electricity Monitoring",
-    "uid": "LxaGORmRz",
-    "version": 32,
-    "weekStart": ""
-  }
-  
+          "value": [
+            "$__all"
+          ]
+        },
+        "hide": 0,
+        "includeAll": true,
+        "label": "Electricity Metrics",
+        "multi": true,
+        "name": "metrics",
+        "options": [
+          {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          },
+          {
+            "selected": false,
+            "text": "Consumption",
+            "value": "consumption"
+          },
+          {
+            "selected": false,
+            "text": "Spot Price",
+            "value": "unit_price"
+          },
+          {
+            "selected": false,
+            "text": "Cost",
+            "value": "total_cost"
+          }
+        ],
+        "query": "Consumption : consumption,Spot Price : unit_price,Cost : total_cost",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      }
+    ]
+  },
+  "time": {
+    "from": "now/M",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Home Electricity Monitoring",
+  "uid": "LxaGORmRz",
+  "version": 34,
+  "weekStart": ""
+}
