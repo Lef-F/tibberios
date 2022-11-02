@@ -4,39 +4,33 @@ from datetime import datetime
 from pprint import pprint
 
 
-async def main(
-    db_path: str,
-    config_path: str,
-    resolution: str,
-    records: int,
-    generate_vis: str,
-    update_display: bool,
-    verbose: bool,
-) -> None:
+def setup(config_path: str, db_path: str, verbose: bool = False) -> Config:
     config = Config(filepath=config_path)
 
     if db_path:
-        if config.database_path:
-            if config.database_path != db_path:
-                raise RuntimeError(
-                    f"""
-                We found two different database paths defined in --db-path and {config_path}.
-                Please only provide one.
-                --db-path: {db_path}
-                {config_path}: {config.database_path}
-                """
-                )
-        pass
-    else:
-        db_path = config.database_path
+        config.database_path = db_path
 
     print(f"Starting at {datetime.now().isoformat()}")
     if verbose:
         print(f"The database path is: {db_path}")
         print(f"The config path is: {config_path}")
+    return config
+
+
+async def main(
+    db_path: str,
+    config_path: str,
+    resolution: str,
+    records: int,
+    verbose: bool,
+) -> None:
+
+    config = setup(config_path=config_path, db_path=db_path, verbose=verbose)
+
+    if verbose:
         print(f"Fetching {records} in {resolution} resolution")
 
-    db = Database(db_path)
+    db = Database(config.database_path)
     tib = TibberConnector(config.tibber_api_key)
     price_data = await tib.get_price_data(resolution=resolution, records=records)
 
@@ -64,21 +58,33 @@ async def main(
         print("Latest 10 consumption values:")
         pprint(db.get_latest_data(name=tbl_name, order="start_time"))
 
-    # TODO: make into subcommand using Python click
-    if generate_vis:
-        print(f"Generating visualization at {generate_vis}")
-        gv = GenerateViz(db)
-        # TODO: allow user to set comparison
-        # 4kWh ~ the cost of showering for 10 minutes at 40C
-        gv.create_visualization(filepath=generate_vis, comparison_kwh=4, decimals=0)
-
     db.close()
 
-    # TODO: make into subcommand using Python click
+    print(f"Ended at {datetime.now().isoformat()}")
+
+
+def generate_vis(args) -> None:
+    config = setup(
+        config_path=args.config_path, db_path=args.db_path, verbose=args.verbose
+    )
+    db = Database(config.database_path)
+
+    print(f"Generating visualization at {args.output}")
+    gv = GenerateViz(db)
+    # TODO: allow user to set comparison
+    # 4kWh ~ the cost of showering for 10 minutes at 40C
+    gv.create_visualization(filepath=args.output, comparison_kwh=4, decimals=0)
+
+    db.close()
+    print(f"Ended at {datetime.now().isoformat()}")
+
+
+def update_display(args) -> None:
+    print(f"Started at {datetime.now().isoformat()}")
     if update_display:
         from .display import update
 
-        update(generate_vis)
+        update(args.file)
     print(f"Ended at {datetime.now().isoformat()}")
 
 
@@ -116,21 +122,6 @@ def run() -> None:
         default=24 * 2,
         help="The number of latest records to fetch from now to the past from the Tibber API.",
     )
-    # TODO: Make subcommand
-    parser.add_argument(
-        "--generate-vis",
-        required=False,
-        type=str,
-        help="Generate visualization of prices for today and tomorrow.",
-    )
-    # TODO: Make subcommand
-    parser.add_argument(
-        "--update-display",
-        required=False,
-        default=False,
-        action="store_true",
-        help="Update the Waveshare 7.5 inch V2 e-Paper Display.",
-    )
     parser.add_argument(
         "--verbose",
         required=False,
@@ -138,19 +129,48 @@ def run() -> None:
         action="store_true",
         help="Show more information from the process.",
     )
+
+    subparsers = parser.add_subparsers(
+        title="Visualize",
+        description="Commands to visualize and display electricity prices.",
+    )
+    vis_parser = subparsers.add_parser(
+        name="vis", help="Generate visualization of prices for today and tomorrow."
+    )
+    vis_parser.add_argument(
+        "output",
+        type=str,
+        help="Image file output path.",
+    )
+    vis_parser.set_defaults(func=generate_vis)
+
+    display_parser = subparsers.add_parser(
+        name="display",
+        help="Update the external display. Currently only the Waveshare 7.5 inch V2 e-Paper Display is supported.",
+    )
+    display_parser.add_argument(
+        "file",
+        type=str,
+        help="Path to image file to display.",
+    )
+    display_parser.set_defaults(func=update_display)
+
     args = parser.parse_args()
 
-    async_run(
-        main(
-            db_path=args.db_path,
-            config_path=args.config_path,
-            resolution=args.resolution,
-            records=args.records,
-            generate_vis=args.generate_vis,
-            update_display=args.update_display,
-            verbose=args.verbose,
+    if hasattr(args, "func"):
+        # run requested subcommand
+        args.func(args)
+    else:
+        # run tibber API data update
+        async_run(
+            main(
+                db_path=args.db_path,
+                config_path=args.config_path,
+                resolution=args.resolution,
+                records=args.records,
+                verbose=args.verbose,
+            )
         )
-    )
     exit(0)
 
 
