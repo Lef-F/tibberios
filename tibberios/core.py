@@ -127,6 +127,7 @@ class TibberConnector:
         return self.price_data
 
 
+# TODO: Refactor to work natively with DbTable objects
 class Database:
     """For smoother SQLite3 database operations."""
 
@@ -268,3 +269,19 @@ class Database:
 
     def close(self) -> None:
         self.connection.close()
+
+
+@dataclass
+class DbTable:
+    name: str  # The name of the table
+    columns: dict  # A map of column names (keys) to SQLite data types (values)
+    pk: str  # The name of the primary key column
+    order: str = None  # The column to order by
+
+    @property
+    def column_names(self) -> list[str]:
+        return list(self.columns.keys())
+
+    @property
+    def column_types(self) -> list[str]:
+        return list(self.columns.values())
