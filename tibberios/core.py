@@ -139,6 +139,7 @@ class TibberConnector:
 
 
 # TODO: Refactor to work natively with DbTable objects
+# TODO: Refactor out of core.py to database.py
 class Database:
     """For smoother SQLite3 database operations."""
 
@@ -311,3 +312,10 @@ class DbTable:
     @property
     def column_types(self) -> list[str]:
         return list(self.columns.values())
+
+
+# TODO: Refactor from core.py to types.py
+@dataclass
+class Event:
+    name: str  # The name of the event type
+    schema: dict  # The schema of the payload

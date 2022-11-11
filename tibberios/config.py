@@ -1,5 +1,6 @@
-from .core import DbTable
+from .core import DbTable, Event
 
+# TABLES
 CONSUMPTION_TBL = DbTable(
     name="consumption",
     columns={
@@ -12,25 +13,29 @@ CONSUMPTION_TBL = DbTable(
     pk="start_time",
 )
 
-UPDATES_TBL = DbTable(
-    name="updates",
+EVENTS_TBL = DbTable(
+    name="events",
     columns={
         "start_time": "DATE PRIMARY KEY",
         "end_time": "DATE",
-        "requested_records": "REAL",
-        "requested_resolution": "TEXT",
-        "received_records": "REAL",
-        "received_future_records": "REAL",
+        "event_type": "TEXT",
+        "payload": "JSON",
     },
     pk="start_time",
 )
 
-DISPLAY_TBL = DbTable(
-    name="display",
-    columns={
-        "start_time": "DATE PRIMARY KEY",
-        "end_time": "DATE",
-        "event": "TEXT",
+# EVENT TYPES
+DATA_UPDATE = Event(
+    name="Consumption Update",
+    schema={
+        "records": int,
+        "resolution": int,
+        "count_historical_data": int,
+        "count_current_data": int,
+        "db_rows": int,
     },
-    pk="start_time",
 )
+
+VIS_GEN = Event(name="Generate Visualization", schema={"filename": str})
+
+DISPLAY_UPDATE = Event(name="Update Display", schema={})
