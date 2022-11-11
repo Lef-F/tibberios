@@ -102,7 +102,10 @@ class PriceData:
 
 class TibberConnector:
     def __init__(self, tibber_api_key: str) -> None:
-        self._access_token = tibber_api_key
+        if isinstance(tibber_api_key, str):
+            self._access_token = tibber_api_key
+        else:
+            raise TypeError(f"Expected string but {type(tibber_api_key)} was provided.")
 
     async def get_price_data(self, resolution: str, records: int) -> PriceData:
         # TODO: Allow for multiple homes
