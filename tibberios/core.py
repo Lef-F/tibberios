@@ -321,28 +321,28 @@ class Database:
         -------
             The total change since the last update of the target.
         """
-        source_where = f"WHERE event_type = {source_type}" if source_type else ""
-        target_where = f"WHERE event_type = {target_type}" if target_type else ""
+        source_where = f"WHERE event_type = '{source_type}'" if source_type else ""
+        target_where = f"WHERE event_type = '{target_type}'" if target_type else ""
         query = f"""
             WITH row_diffs AS (
                 SELECT 
-                    start_time,
-                    payload->>'{metric}' 
-                    - lag(payload->>'{metric}') OVER (ORDER BY start_time) AS diff
+                    {source_ordering},
+                    json_extract(payload, '$.{metric}')
+                    - lag(json_extract(payload, '$.{metric}')) OVER (ORDER BY {source_ordering}) AS diff
                 FROM {source_name}
                 {source_where}
             )
             , last_update AS (
-                SELECT start_time
+                SELECT {target_ordering}
                 FROM {target_name}
                 {target_where}
-                ORDER BY start_time DESC
+                ORDER BY {target_ordering} DESC
                 LIMIT 1
             )
             SELECT SUM(diff)
             FROM row_diffs
             JOIN last_update
-                ON unixepoch(row_diffs.start_time) >= unixepoch(last_update.start_time);
+                ON julianday(row_diffs.{source_ordering}) >= julianday(last_update.{target_ordering});
         """
         cursor = self.connection
         cursor = cursor.execute(query)
