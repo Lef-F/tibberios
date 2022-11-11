@@ -198,6 +198,7 @@ def update_display(args) -> None:
         )
     else:
         print(f"No new rows to update.")
+        end_time = datetime.now().isoformat()
 
     db.close()
     print(f"Ended at {end_time}")
