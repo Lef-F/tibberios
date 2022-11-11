@@ -184,7 +184,7 @@ def update_display(args) -> None:
         db.insert_table(
             name=EVENTS_TBL.name,
             columns=EVENTS_TBL.column_names,
-            values=[(start_time, None, DISPLAY_UPDATE.name)],
+            values=[(start_time, None, DISPLAY_UPDATE.name, dumps(None))],
         )
 
         update(args.file)
@@ -193,7 +193,7 @@ def update_display(args) -> None:
         db.upsert_table(
             name=EVENTS_TBL.name,
             columns=EVENTS_TBL.column_names,
-            values=[(start_time, end_time, DISPLAY_UPDATE.name)],
+            values=[(start_time, end_time, DISPLAY_UPDATE.name, dumps(None))],
             pk=EVENTS_TBL.pk,
         )
     else:
