@@ -23,7 +23,9 @@ I really wanted to store some of my Tibber data in a database I control to achie
 
 First setup your environment using: `poetry install`
 
-**Note:** For ARM devices (e.g. Raspberry Pi) `pip install -r requirements_arm.txt`.
+For ARM devices (Raspberry Pi 4 tested) we provide the [`Makefile`](/Makefile) target `rpi-setup` which you can execute with `make rpi-setup`.
+
+**Note:** For ARM devices (e.g. Raspberry Pi) we provide [`requirements_rpi.txt`](/requirements_rpi.txt).
 After the introduction of the [`kaleido`](https://github.com/plotly/Kaleido) Python package we've had some issues setting up the Python environment for ARM devices due to them having split up the support into a new version `0.2.1.post1` for some reason. 🤷‍♂️
 Maybe we'll get something from [this GitHub issue](https://github.com/plotly/Kaleido/issues/151).
 In the future we will have to move away from `plotly` since it can only use the `kaleido` engine for exporting plots to static files [and it looks under-maintained](https://github.com/plotly/Kaleido/issues/150).
@@ -32,6 +34,11 @@ We haven't tested [`orca`](https://github.com/plotly/orca) but it looks outdated
 It is recommended that you use a virtual environment for the best results.
 `poetry install` will already create one for you which you can activate with `poetry shell`.
 If you're going the `pip` way then you can:
+
+- `make rpi-setup`
+- or `make py-setup`
+
+Or if you wanna do it yourself:
 
 1. `python3 -m venv .venv`
 2. `source .venv/bin/activate`
