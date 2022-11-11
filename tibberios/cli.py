@@ -175,7 +175,7 @@ def update_display(args) -> None:
             source_type=DATA_UPDATE.name,
             target_type=DISPLAY_UPDATE.name,
         )[0][0]
-        if data_changes > 0:
+        if data_changes and data_changes > 0:
             run_update = True
     else:
         run_update = True
