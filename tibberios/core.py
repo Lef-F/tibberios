@@ -294,10 +294,65 @@ class Database:
         cursor.execute(query)
         self.connection.commit()
 
+    # TODO: Refactor to not have hardcoding
+    def diff_since_last_update(
+        self,
+        source_name: str,
+        target_name: str,
+        metric: str,
+        source_ordering: str,
+        target_ordering: str,
+        source_type: str = None,
+        target_type: str = None,
+    ) -> list[tuple]:
+        """Get the total change since the last update of the target.
+
+        Args
+        ----
+            source_name: The name of the table to sum the changes
+            target_name: The name of the table to check for latest update timestamp
+            metric: The metric to sum
+            source_ordering: The column to order the source by
+            target_ordering: The column to order the target by
+            source_type: The event type from which to sum the changes
+            target_type: The event type from which to fetch the latest update timestamp
+
+        Returns
+        -------
+            The total change since the last update of the target.
+        """
+        source_where = f"WHERE event_type = {source_type}" if source_type else ""
+        target_where = f"WHERE event_type = {target_type}" if target_type else ""
+        query = f"""
+            WITH row_diffs AS (
+                SELECT 
+                    start_time,
+                    payload->>'{metric}' 
+                    - lag(payload->>'{metric}') OVER (ORDER BY start_time) AS diff
+                FROM {source_name}
+                {source_where}
+            )
+            , last_update AS (
+                SELECT start_time
+                FROM {target_name}
+                {target_where}
+                ORDER BY start_time DESC
+                LIMIT 1
+            )
+            SELECT SUM(diff)
+            FROM row_diffs
+            JOIN last_update
+                ON unixepoch(row_diffs.start_time) >= unixepoch(last_update.start_time);
+        """
+        cursor = self.connection
+        cursor = cursor.execute(query)
+        return cursor.fetchall()
+
     def close(self) -> None:
         self.connection.close()
 
 
+# TODO: Refactor from core.py to types.py
 @dataclass
 class DbTable:
     name: str  # The name of the table

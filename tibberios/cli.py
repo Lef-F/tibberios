@@ -1,7 +1,8 @@
 from .core import Config, Database, TibberConnector
 from .visualization import GenerateViz
-from .config import CONSUMPTION_TBL, UPDATES_TBL, DISPLAY_TBL
+from .config import CONSUMPTION_TBL, EVENTS_TBL, DATA_UPDATE, DISPLAY_UPDATE, VIS_GEN
 from datetime import datetime
+from json import dumps
 from pprint import pprint
 
 
@@ -32,20 +33,22 @@ async def main(
         print(f"Fetching {records} in {resolution} resolution")
 
     db = Database(config.database_path)
-    db.create_table(name=UPDATES_TBL.name, cols_n_types=UPDATES_TBL.columns)
+    db.create_table(name=EVENTS_TBL.name, cols_n_types=EVENTS_TBL.columns)
     start_time = datetime.now().isoformat()
     db.insert_table(
-        name=UPDATES_TBL.name,
-        columns=UPDATES_TBL.column_names,
+        name=EVENTS_TBL.name,
+        columns=EVENTS_TBL.column_names,
         values=[
             (
                 start_time,
                 None,
-                records,
-                resolution,
-                None,
-                None,
-                None,
+                DATA_UPDATE.name,
+                dumps(
+                    {
+                        "records": records,
+                        "resolution": resolution,
+                    }
+                ),
             )
         ],
     )
@@ -75,20 +78,25 @@ async def main(
     end_time = datetime.now().isoformat()
     db_rows = db.query(f"SELECT COUNT(*) FROM {CONSUMPTION_TBL.name};")[0][0]
     db.upsert_table(
-        name=UPDATES_TBL.name,
-        columns=UPDATES_TBL.column_names,
+        name=EVENTS_TBL.name,
+        columns=EVENTS_TBL.column_names,
         values=[
             (
                 start_time,
                 end_time,
-                records,
-                resolution,
-                price_data.count_historical_data,
-                price_data.count_current_data,
-                db_rows,
+                DATA_UPDATE.name,
+                dumps(
+                    {
+                        "records": records,
+                        "resolution": resolution,
+                        "count_historical_data": price_data.count_historical_data,
+                        "count_current_data": price_data.count_current_data,
+                        "db_rows": db_rows,
+                    }
+                ),
             )
         ],
-        pk=UPDATES_TBL.pk,
+        pk=EVENTS_TBL.pk,
     )
 
     db.close()
@@ -102,11 +110,18 @@ def generate_vis(args) -> None:
     )
     db = Database(config.database_path)
     start_time = datetime.now().isoformat()
-    db.create_table(name=DISPLAY_TBL.name, cols_n_types=DISPLAY_TBL.columns)
+    db.create_table(name=EVENTS_TBL.name, cols_n_types=EVENTS_TBL.columns)
     db.insert_table(
-        name=DISPLAY_TBL.name,
-        columns=DISPLAY_TBL.column_names,
-        values=[(start_time, None, "Generate Visualization")],
+        name=EVENTS_TBL.name,
+        columns=EVENTS_TBL.column_names,
+        values=[
+            (
+                start_time,
+                None,
+                VIS_GEN.name,
+                dumps({"filename": args.output}),
+            )
+        ],
     )
 
     print(f"Generating visualization at {args.output}")
@@ -117,10 +132,17 @@ def generate_vis(args) -> None:
 
     end_time = datetime.now().isoformat()
     db.upsert_table(
-        name=DISPLAY_TBL.name,
-        columns=DISPLAY_TBL.column_names,
-        values=[(start_time, end_time, "Generate Visualization")],
-        pk=DISPLAY_TBL.pk,
+        name=EVENTS_TBL.name,
+        columns=EVENTS_TBL.column_names,
+        values=[
+            (
+                start_time,
+                end_time,
+                VIS_GEN.name,
+                dumps({"filename": args.output}),
+            )
+        ],
+        pk=EVENTS_TBL.pk,
     )
 
     db.close()
@@ -136,7 +158,7 @@ def update_display(args) -> None:
     )
     print(f"Started at {start_time}")
     db = Database(config.database_path)
-    db.create_table(name=DISPLAY_TBL.name, cols_n_types=DISPLAY_TBL.columns)
+    db.create_table(name=EVENTS_TBL.name, cols_n_types=EVENTS_TBL.columns)
 
     run_update = False
 
@@ -144,25 +166,35 @@ def update_display(args) -> None:
         # TODO: check if the number of rows in the consumption table
         # has changed since the last display update
         # if yes then update
-        pass
+        data_changes = db.diff_since_last_update(
+            source_name=EVENTS_TBL.name,
+            target_name=EVENTS_TBL.name,
+            metric="db_rows",
+            source_ordering=EVENTS_TBL.pk,
+            target_ordering=EVENTS_TBL.pk,
+            source_type=DATA_UPDATE.name,
+            target_type=DISPLAY_UPDATE.name,
+        )[0][0]
+        if data_changes > 0:
+            run_update = True
     else:
         run_update = True
 
     if run_update:
         db.insert_table(
-            name=DISPLAY_TBL.name,
-            columns=DISPLAY_TBL.column_names,
-            values=[(start_time, None, "Update Display")],
+            name=EVENTS_TBL.name,
+            columns=EVENTS_TBL.column_names,
+            values=[(start_time, None, DISPLAY_UPDATE.name)],
         )
 
         update(args.file)
 
         end_time = datetime.now().isoformat()
         db.upsert_table(
-            name=DISPLAY_TBL.name,
-            columns=DISPLAY_TBL.column_names,
-            values=[(start_time, end_time, "Update Display")],
-            pk=DISPLAY_TBL.pk,
+            name=EVENTS_TBL.name,
+            columns=EVENTS_TBL.column_names,
+            values=[(start_time, end_time, DISPLAY_UPDATE.name)],
+            pk=EVENTS_TBL.pk,
         )
     else:
         print(f"No new rows to update.")
