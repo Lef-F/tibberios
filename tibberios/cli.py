@@ -1,5 +1,6 @@
 from .core import Config, Database, TibberConnector
 from .visualization import GenerateViz
+from .config import CONSUMPTION_TBL, UPDATES_TBL, DISPLAY_TBL
 from datetime import datetime
 from pprint import pprint
 
@@ -31,36 +32,68 @@ async def main(
         print(f"Fetching {records} in {resolution} resolution")
 
     db = Database(config.database_path)
+    db.create_table(name=UPDATES_TBL.name, cols_n_types=UPDATES_TBL.columns)
+    start_time = datetime.now().isoformat()
+    db.insert_table(
+        name=UPDATES_TBL.name,
+        columns=UPDATES_TBL.column_names,
+        values=[
+            (
+                start_time,
+                None,
+                records,
+                resolution,
+                None,
+                None,
+                None,
+            )
+        ],
+    )
+
+    db.create_table(name=CONSUMPTION_TBL.name, cols_n_types=CONSUMPTION_TBL.columns)
+    if verbose:
+        print("Consumption and update tables created")
+        print("Querying the Tibber API for the latest data")
+
     tib = TibberConnector(config.tibber_api_key)
     price_data = await tib.get_price_data(resolution=resolution, records=records)
 
-    tbl_name = "consumption"
-    columns = {
-        "start_time": "DATE PRIMARY KEY",
-        "unit_price": "REAL",
-        "total_cost": "REAL",
-        "cost": "REAL",
-        "consumption": "REAL",
-    }
-    pk = "start_time"
-
-    db.create_table(name=tbl_name, cols_n_types=columns)
-    if verbose:
-        print("Consumption table created")
     db.upsert_table(
-        name=tbl_name, columns=columns.keys(), values=price_data.price_table, pk=pk
+        name=CONSUMPTION_TBL.name,
+        columns=CONSUMPTION_TBL.column_names,
+        values=price_data.price_table,
+        pk=CONSUMPTION_TBL.pk,
     )
     if verbose:
         print("Cleaning rows with NULL or empty time values")
-    db.delete_null_rows(name=tbl_name, pk=pk)
+    db.delete_null_rows(name=CONSUMPTION_TBL.name, pk=CONSUMPTION_TBL.pk)
     if verbose:
         print("Consumption values upserted")
         print("Latest 10 consumption values:")
-        pprint(db.get_latest_data(name=tbl_name, order="start_time"))
+        pprint(db.get_latest_data(name=CONSUMPTION_TBL.name, order="start_time"))
+
+    end_time = datetime.now().isoformat()
+    db_rows = db.query(f"SELECT COUNT(*) FROM {CONSUMPTION_TBL.name};")[0][0]
+    db.upsert_table(
+        name=UPDATES_TBL.name,
+        columns=UPDATES_TBL.column_names,
+        values=[
+            (
+                start_time,
+                end_time,
+                records,
+                resolution,
+                price_data.count_historical_data,
+                price_data.count_current_data,
+                db_rows,
+            )
+        ],
+        pk=UPDATES_TBL.pk,
+    )
 
     db.close()
 
-    print(f"Ended at {datetime.now().isoformat()}")
+    print(f"Ended at {end_time}")
 
 
 def generate_vis(args) -> None:
@@ -68,6 +101,13 @@ def generate_vis(args) -> None:
         config_path=args.config_path, db_path=args.db_path, verbose=args.verbose
     )
     db = Database(config.database_path)
+    start_time = datetime.now().isoformat()
+    db.create_table(name=DISPLAY_TBL.name, cols_n_types=DISPLAY_TBL.columns)
+    db.insert_table(
+        name=DISPLAY_TBL.name,
+        columns=DISPLAY_TBL.column_names,
+        values=[(start_time, None, "Generate Visualization")],
+    )
 
     print(f"Generating visualization at {args.output}")
     gv = GenerateViz(db)
@@ -75,17 +115,60 @@ def generate_vis(args) -> None:
     # 4kWh ~ the cost of showering for 10 minutes at 40C
     gv.create_visualization(filepath=args.output, comparison_kwh=4, decimals=0)
 
+    end_time = datetime.now().isoformat()
+    db.upsert_table(
+        name=DISPLAY_TBL.name,
+        columns=DISPLAY_TBL.column_names,
+        values=[(start_time, end_time, "Generate Visualization")],
+        pk=DISPLAY_TBL.pk,
+    )
+
     db.close()
-    print(f"Ended at {datetime.now().isoformat()}")
+    print(f"Ended at {end_time}")
 
 
 def update_display(args) -> None:
-    print(f"Started at {datetime.now().isoformat()}")
-    if update_display:
-        from .display import update
+    start_time = datetime.now().isoformat()
+    from .display import update
+
+    config = setup(
+        config_path=args.config_path, db_path=args.db_path, verbose=args.verbose
+    )
+    print(f"Started at {start_time}")
+    db = Database(config.database_path)
+    db.create_table(name=DISPLAY_TBL.name, cols_n_types=DISPLAY_TBL.columns)
+
+    run_update = False
+
+    if not args.force:
+        # TODO: check if the number of rows in the consumption table
+        # has changed since the last display update
+        # if yes then update
+        pass
+    else:
+        run_update = True
+
+    if run_update:
+        db.insert_table(
+            name=DISPLAY_TBL.name,
+            columns=DISPLAY_TBL.column_names,
+            values=[(start_time, None, "Update Display")],
+        )
 
         update(args.file)
-    print(f"Ended at {datetime.now().isoformat()}")
+
+        end_time = datetime.now().isoformat()
+        db.upsert_table(
+            name=DISPLAY_TBL.name,
+            columns=DISPLAY_TBL.column_names,
+            values=[(start_time, end_time, "Update Display")],
+            pk=DISPLAY_TBL.pk,
+        )
+    else:
+        print(f"No new rows to update.")
+
+    db.close()
+    print(f"Ended at {end_time}")
 
 
 def run() -> None:
@@ -152,6 +235,12 @@ def run() -> None:
         "file",
         type=str,
         help="Path to image file to display.",
+    )
+    display_parser.add_argument(
+        "--force",
+        action="store_true",
+        required=False,
+        help="Force update the display.",
     )
     display_parser.set_defaults(func=update_display)
 

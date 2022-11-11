@@ -35,6 +35,14 @@ class PriceData:
     def __post_init__(self) -> None:
         self.price_table = self._convert_values()
 
+    @property
+    def count_historical_data(self):
+        return len(self.historical_data)
+
+    @property
+    def count_current_data(self):
+        return len(self.current_data)
+
     def _convert_values(self) -> list[tuple]:
         # assuming that historical values have the following schema:
         # (start_time, unit_price, total_cost, cost, consumption)
