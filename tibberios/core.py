@@ -150,6 +150,21 @@ class Database:
         if hasattr(self, "connection") and self.connection:
             self.close()
 
+    def query(self, query: str) -> list[tuple]:
+        """Send a custom SQL query.
+
+        Args
+        ----
+            query: The SQL query for the database to execute
+
+        Returns
+        -------
+            A list of tuples where each result row is represented as a tuple in the list
+        """
+        cursor = self.connection
+        cursor = cursor.execute(query)
+        return cursor.fetchall()
+
     def delete_database(self) -> bool:
         """DESTROY THE DATABASE.
 
